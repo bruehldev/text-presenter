@@ -1,0 +1,16 @@
+name: textpresenter
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - conda-forge::python=3.10.12
+  - conda-forge::numpy
+  - conda-forge::black
+  - pip:
+    - torch
+    - torchvision
+    - torchaudio
+    - transformers
+    - TTS
+    - tk
+    - pygame
