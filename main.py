@@ -1,4 +1,3 @@
-import os
 import tkinter as tk
 
 from tkinter import messagebox, ttk
@@ -13,49 +12,50 @@ root = tk.Tk()
 root.title("Text Presenter")
 
 
-def process_text():
-    generate_tts(text_input.get("1.0", "end-1c"))
+def process_text(words):
+    generate_tts(words)
     # Show the processed text in a new window
     messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
 
 
-def display_words(speed):
-    words = text_input.get("1.0", "end-1c").split()
-
+def display_words(
+    speed, words, target_text_widget, target_word_label, target_word_window
+):
     # add text to the widget
-    processed_text_widget.insert("1.0", text_input.get("1.0", "end-1c"))
+    target_text_widget.insert("1.0", words)
     # create text index
     word_pointer_start = "1.0"
     word_pointer_end = "1.0"
 
     # Iterate through words and display them
-    for i in range(len(words)):
-        word = words[i]
-        word_label.config(text=word)
-        word_window.update()
+    words_split = words.split()
+    for i in range(len(words_split)):
+        word = words_split[i]
+        target_word_label.config(text=word)
+        target_word_window.update()
 
         # use index to highlight the word in the text widget
         # print word in the text widget
-        word_pointer_start = processed_text_widget.search(
+        word_pointer_start = target_text_widget.search(
             word, word_pointer_end, stopindex="end"
         )
         word_pointer_end = f"{word_pointer_start}+{len(word)}c"
 
-        processed_text_widget.tag_add("highlight", word_pointer_start, word_pointer_end)
-        processed_text_widget.tag_config("highlight", background="yellow")
+        target_text_widget.tag_add("highlight", word_pointer_start, word_pointer_end)
+        target_text_widget.tag_config("highlight", background="yellow")
 
         # unmark previous word
         if i > 0:
-            processed_text_widget.tag_remove(
+            target_text_widget.tag_remove(
                 "highlight",
-                f"{word_pointer_start}-{len(words[i-1])+1}c",
+                f"{word_pointer_start}-{len(words_split[i-1])+1}c",
                 word_pointer_start,
             )
-        processed_text_widget.pack()
+        target_text_widget.pack()
         processed_text_window.update()
 
         delay = int(1000 / speed)
-        word_window.after(delay)
+        target_word_window.after(delay)
 
 
 # Text input
@@ -66,7 +66,9 @@ text_input.pack()
 process_button = tk.Button(
     root,
     text="Process",
-    command=process_text,
+    command=lambda: process_text(
+        text_input.get("1.0", "end-1c"),
+    ),
 )
 process_button.pack()
 
@@ -162,7 +164,13 @@ speed_slider.grid(row=0, column=1, padx=10, pady=10)
 display_button = tk.Button(
     word_display_window,
     text="Display Words",
-    command=lambda: display_words(speed_var.get()),
+    command=lambda: display_words(
+        speed_var.get(),
+        text_input.get("1.0", "end-1c"),
+        processed_text_widget,
+        word_label,
+        word_window,
+    ),
 )
 display_button.grid(row=1, column=0, columnspan=2, pady=10)
 
