@@ -104,20 +104,18 @@ root = tk.Tk()
 root.title("Text Presenter")
 
 
-def load_size():
-    with open("myapp.conf", "r") as conf:
-        root.geometry(conf.read())
+def load_size(window, filename):
+    try:
+        with open(filename, "r") as conf:
+            window.geometry(conf.read())
+    except FileNotFoundError:
+        pass
 
 
-load_size()
+def save_size(window, filename):
+    with open(filename, "w") as conf:
+        conf.write(window.geometry())
 
-
-def save_size(event):
-    with open("myapp.conf", "w") as conf:
-        conf.write(root.geometry())  # Assuming root is the root window
-
-
-root.bind("<Configure>", save_size)
 
 # Text input
 text_input = tk.Text(root, height=10, width=50)
@@ -131,17 +129,34 @@ process_button.pack()
 play_window = tk.Toplevel(root)
 play_window.title("Play Audio")
 
-# Play button in the separate window
-play_button = tk.Button(play_window, text="Play TTS Audio", command=play_audio)
-play_button.pack()
-
-# Stop button in the separate window
-stop_button = tk.Button(play_window, text="Stop Audio", command=stop_audio)
-stop_button.pack()
-
 # New window for word display
 word_display_window = tk.Toplevel(root)
 word_display_window.title("Word Display")
+
+# Load window sizes from file
+load_size(root, "root.conf")
+load_size(play_window, "play_window.conf")
+load_size(word_display_window, "word_display_window.conf")
+
+
+def configure_and_save_size(event, window, filename):
+    window.update()
+    save_size(window, filename)
+
+
+root.bind(
+    "<Configure>", lambda event: configure_and_save_size(event, root, "root.conf")
+)
+play_window.bind(
+    "<Configure>",
+    lambda event: configure_and_save_size(event, play_window, "play_window.conf"),
+)
+word_display_window.bind(
+    "<Configure>",
+    lambda event: configure_and_save_size(
+        event, word_display_window, "word_display_window.conf"
+    ),
+)
 
 # Speed control slider
 speed_label = tk.Label(word_display_window, text="Speed:")
