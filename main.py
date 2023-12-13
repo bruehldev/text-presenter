@@ -31,12 +31,18 @@ def play_audio():
         pygame.mixer.music.play()
 
         # Keep the window open until the audio is done playing
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
+        # while pygame.mixer.music.get_busy():
+        #     pygame.time.Clock().tick(10)
+
     else:
         messagebox.showwarning(
             "File Not Found", "No TTS audio file found. Please process the text first."
         )
+
+
+def stop_audio():
+    # Stop the audio playback
+    pygame.mixer.music.stop()
 
 
 def display_words(speed):
@@ -82,6 +88,9 @@ play_window.title("Play Audio")
 play_button = tk.Button(play_window, text="Play TTS Audio", command=play_audio)
 play_button.pack()
 
+# Stop button in the separate window
+stop_button = tk.Button(play_window, text="Stop Audio", command=stop_audio)
+stop_button.pack()
 
 # New window for word display
 word_display_window = tk.Toplevel(root)
