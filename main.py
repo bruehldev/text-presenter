@@ -1,56 +1,11 @@
-import tkinter as tk
-from tkinter import messagebox, ttk
-from TTS.api import TTS
-import pygame
 import os
-import torch
+import tkinter as tk
 
+from tkinter import messagebox, ttk
 
-### config ###
-def create_config_folder():
-    config_folder = "config"
-    if not os.path.exists(config_folder):
-        os.makedirs(config_folder)
-
-
-create_config_folder()
-
-
-### TTS ###
-def generate_tts():
-    # Init
-    text = text_input.get("1.0", "end-1c")
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
-
-    # Generate TTS audio
-    tts.tts_to_file(
-        text=text, speaker_wav="example_1.wav", language="en", file_path="output.wav"
-    )
-
-
-### Audio ###
-def play_audio():
-    if os.path.exists("output.wav"):
-        # Init
-        pygame.init()
-        pygame.mixer.music.load("output.wav")
-
-        # Play
-        pygame.mixer.music.play()
-
-        # Keep the window open until the audio is done playing
-        # while pygame.mixer.music.get_busy():
-        # pygame.time.Clock().tick(10)
-
-    else:
-        messagebox.showwarning(
-            "File Not Found", "No TTS audio file found. Please process the text first."
-        )
-
-
-def stop_audio():
-    pygame.mixer.music.stop()
+from tts_manager import generate_tts
+from audio_manager import play_audio, stop_audio
+from config_manager import load_size, save_size
 
 
 ### Tkinter setup ###
@@ -59,7 +14,7 @@ root.title("Text Presenter")
 
 
 def process_text():
-    generate_tts()
+    generate_tts(text_input.get("1.0", "end-1c"))
     # Show the processed text in a new window
     messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
 
@@ -103,29 +58,20 @@ def display_words(speed):
         word_window.after(delay)
 
 
-def load_size(window, filename):
-    try:
-        with open(filename, "r") as conf:
-            window.geometry(conf.read())
-    except FileNotFoundError:
-        pass
-
-
-def save_size(window, filename):
-    with open(filename, "w") as conf:
-        conf.write(window.geometry())
-
-
 # Text input
-text_input = tk.Text(root, height=10, width=50)
+text_input = tk.Text(root, height=50, width=80)
 text_input.pack()
 
 # Process button
-process_button = tk.Button(root, text="Process", command=process_text)
+process_button = tk.Button(
+    root,
+    text="Process",
+    command=process_text,
+)
 process_button.pack()
 
 # Separate window for playing audio
-play_window = tk.Toplevel(root)
+play_window = tk.Toplevel(root, height=10, width=10)
 play_window.title("Play Audio")
 
 # Play button in the separate window
@@ -137,18 +83,19 @@ stop_button = tk.Button(play_window, text="Stop Audio", command=stop_audio)
 stop_button.pack()
 
 # New window for word display
-word_display_window = tk.Toplevel(root)
+word_display_window = tk.Toplevel(root, height=100, width=100)
 word_display_window.title("Word Display")
 
-word_window = tk.Toplevel(root)
-word_window.title("Word Display")
-
-processed_text_window = tk.Toplevel(root)
-processed_text_window.title("Processed Text")
+word_window = tk.Toplevel(root, height=100, width=100)
+word_window.title("Word")
 
 # Create a label to display words
-word_label = tk.Label(word_window, font=("Helvetica", 16))
+word_label = tk.Label(word_window, text="")
 word_label.pack()
+
+processed_text_window = tk.Toplevel(root, height=100, width=100)
+processed_text_window.title("Processed Text")
+
 
 processed_text_widget = tk.Text(processed_text_window, wrap="word", height=10, width=50)
 
