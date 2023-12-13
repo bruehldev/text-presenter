@@ -103,6 +103,22 @@ def display_words(speed):
 root = tk.Tk()
 root.title("Text Presenter")
 
+
+def load_size():
+    with open("myapp.conf", "r") as conf:
+        root.geometry(conf.read())
+
+
+load_size()
+
+
+def save_size(event):
+    with open("myapp.conf", "w") as conf:
+        conf.write(root.geometry())  # Assuming root is the root window
+
+
+root.bind("<Configure>", save_size)
+
 # Text input
 text_input = tk.Text(root, height=10, width=50)
 text_input.pack()
