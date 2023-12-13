@@ -99,6 +99,14 @@ def display_words(speed):
         word_window.after(delay)
 
 
+def create_config_folder():
+    config_folder = "config"
+    if not os.path.exists(config_folder):
+        os.makedirs(config_folder)
+
+
+create_config_folder()
+
 # Tkinter setup
 root = tk.Tk()
 root.title("Text Presenter")
@@ -134,9 +142,9 @@ word_display_window = tk.Toplevel(root)
 word_display_window.title("Word Display")
 
 # Load window sizes from file
-load_size(root, "root.conf")
-load_size(play_window, "play_window.conf")
-load_size(word_display_window, "word_display_window.conf")
+load_size(root, "config/root.conf")
+load_size(play_window, "config/play_window.conf")
+load_size(word_display_window, "config/word_display_window.conf")
 
 
 def configure_and_save_size(event, window, filename):
@@ -145,16 +153,19 @@ def configure_and_save_size(event, window, filename):
 
 
 root.bind(
-    "<Configure>", lambda event: configure_and_save_size(event, root, "root.conf")
+    "<Configure>",
+    lambda event: configure_and_save_size(event, root, "config/root.conf"),
 )
 play_window.bind(
     "<Configure>",
-    lambda event: configure_and_save_size(event, play_window, "play_window.conf"),
+    lambda event: configure_and_save_size(
+        event, play_window, "config/play_window.conf"
+    ),
 )
 word_display_window.bind(
     "<Configure>",
     lambda event: configure_and_save_size(
-        event, word_display_window, "word_display_window.conf"
+        event, word_display_window, "config/word_display_window.conf"
     ),
 )
 
