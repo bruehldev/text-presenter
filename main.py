@@ -18,6 +18,18 @@ def generate_tts():
     )
     # wav = tts.tts(text="Hello world!", speaker_wav="example_1.wav", language="en")
 
+
+def process_text():
+    generate_tts()
+    # Show the processed text in a new window
+    text = text_input.get("1.0", "end-1c")
+
+    processed_text_window = tk.Toplevel(root)
+    processed_text_window.title("Processed Text")
+
+    processed_text_label = tk.Label(processed_text_window, text=text)
+    processed_text_label.pack()
+
     messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
 
 
@@ -41,7 +53,6 @@ def play_audio():
 
 
 def stop_audio():
-    # Stop the audio playback
     pygame.mixer.music.stop()
 
 
@@ -77,7 +88,7 @@ text_input = tk.Text(root, height=10, width=50)
 text_input.pack()
 
 # Process button
-process_button = tk.Button(root, text="Process", command=generate_tts)
+process_button = tk.Button(root, text="Process", command=process_text)
 process_button.pack()
 
 # Separate window for playing audio
