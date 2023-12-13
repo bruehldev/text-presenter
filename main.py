@@ -16,20 +16,11 @@ def generate_tts():
     tts.tts_to_file(
         text=text, speaker_wav="example_1.wav", language="en", file_path="output.wav"
     )
-    # wav = tts.tts(text="Hello world!", speaker_wav="example_1.wav", language="en")
 
 
 def process_text():
     generate_tts()
     # Show the processed text in a new window
-    text = text_input.get("1.0", "end-1c")
-
-    processed_text_window = tk.Toplevel(root)
-    processed_text_window.title("Processed Text")
-
-    processed_text_label = tk.Label(processed_text_window, text=text)
-    processed_text_label.pack()
-
     messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
 
 
@@ -44,7 +35,7 @@ def play_audio():
 
         # Keep the window open until the audio is done playing
         # while pygame.mixer.music.get_busy():
-        #     pygame.time.Clock().tick(10)
+        # pygame.time.Clock().tick(10)
 
     else:
         messagebox.showwarning(
@@ -57,26 +48,55 @@ def stop_audio():
 
 
 def display_words(speed):
-    if os.path.exists("output.wav"):
-        words = text_input.get("1.0", "end-1c").split()
-        word_window = tk.Toplevel(root)
-        word_window.title("Word Display")
+    words = text_input.get("1.0", "end-1c").split()
+    word_window = tk.Toplevel(root)
+    word_window.title("Word Display")
 
-        # Create a label to display words
-        word_label = tk.Label(word_window, font=("Helvetica", 16))
-        word_label.pack()
+    processed_text_window = tk.Toplevel(root)
+    processed_text_window.title("Processed Text")
 
-        # Iterate through words and display them
-        for word in words:
-            word_label.config(text=word)
-            word_window.update()
-            delay = int(1000 / speed)
-            word_window.after(delay)
+    # Create a label to display words
+    word_label = tk.Label(word_window, font=("Helvetica", 16))
+    word_label.pack()
 
-    else:
-        messagebox.showwarning(
-            "File Not Found", "No TTS audio file found. Please process the text first."
+    processed_text_widget = tk.Text(
+        processed_text_window, wrap="word", height=10, width=50
+    )
+
+    # add text to the widget
+    processed_text_widget.insert("1.0", text_input.get("1.0", "end-1c"))
+    # create text index
+    word_pointer_start = "1.0"
+    word_pointer_end = "1.0"
+
+    # Iterate through words and display them
+    for i in range(len(words)):
+        word = words[i]
+        word_label.config(text=word)
+        word_window.update()
+
+        # use index to highlight the word in the text widget
+        # print word in the text widget
+        word_pointer_start = processed_text_widget.search(
+            word, word_pointer_end, stopindex="end"
         )
+        word_pointer_end = f"{word_pointer_start}+{len(word)}c"
+
+        processed_text_widget.tag_add("highlight", word_pointer_start, word_pointer_end)
+        processed_text_widget.tag_config("highlight", background="yellow")
+
+        # unmark previous word
+        if i > 0:
+            processed_text_widget.tag_remove(
+                "highlight",
+                f"{word_pointer_start}-{len(words[i-1])+1}c",
+                word_pointer_start,
+            )
+        processed_text_widget.pack()
+        processed_text_window.update()
+
+        delay = int(1000 / speed)
+        word_window.after(delay)
 
 
 # Tkinter setup
