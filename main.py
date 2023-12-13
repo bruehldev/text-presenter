@@ -6,6 +6,17 @@ import os
 import torch
 
 
+### config ###
+def create_config_folder():
+    config_folder = "config"
+    if not os.path.exists(config_folder):
+        os.makedirs(config_folder)
+
+
+create_config_folder()
+
+
+### TTS ###
 def generate_tts():
     # Init
     text = text_input.get("1.0", "end-1c")
@@ -18,12 +29,7 @@ def generate_tts():
     )
 
 
-def process_text():
-    generate_tts()
-    # Show the processed text in a new window
-    messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
-
-
+### Audio ###
 def play_audio():
     if os.path.exists("output.wav"):
         # Init
@@ -47,21 +53,19 @@ def stop_audio():
     pygame.mixer.music.stop()
 
 
+### Tkinter setup ###
+root = tk.Tk()
+root.title("Text Presenter")
+
+
+def process_text():
+    generate_tts()
+    # Show the processed text in a new window
+    messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
+
+
 def display_words(speed):
     words = text_input.get("1.0", "end-1c").split()
-    word_window = tk.Toplevel(root)
-    word_window.title("Word Display")
-
-    processed_text_window = tk.Toplevel(root)
-    processed_text_window.title("Processed Text")
-
-    # Create a label to display words
-    word_label = tk.Label(word_window, font=("Helvetica", 16))
-    word_label.pack()
-
-    processed_text_widget = tk.Text(
-        processed_text_window, wrap="word", height=10, width=50
-    )
 
     # add text to the widget
     processed_text_widget.insert("1.0", text_input.get("1.0", "end-1c"))
@@ -99,19 +103,6 @@ def display_words(speed):
         word_window.after(delay)
 
 
-def create_config_folder():
-    config_folder = "config"
-    if not os.path.exists(config_folder):
-        os.makedirs(config_folder)
-
-
-create_config_folder()
-
-# Tkinter setup
-root = tk.Tk()
-root.title("Text Presenter")
-
-
 def load_size(window, filename):
     try:
         with open(filename, "r") as conf:
@@ -137,14 +128,36 @@ process_button.pack()
 play_window = tk.Toplevel(root)
 play_window.title("Play Audio")
 
+# Play button in the separate window
+play_button = tk.Button(play_window, text="Play TTS Audio", command=play_audio)
+play_button.pack()
+
+# Stop button in the separate window
+stop_button = tk.Button(play_window, text="Stop Audio", command=stop_audio)
+stop_button.pack()
+
 # New window for word display
 word_display_window = tk.Toplevel(root)
 word_display_window.title("Word Display")
+
+word_window = tk.Toplevel(root)
+word_window.title("Word Display")
+
+processed_text_window = tk.Toplevel(root)
+processed_text_window.title("Processed Text")
+
+# Create a label to display words
+word_label = tk.Label(word_window, font=("Helvetica", 16))
+word_label.pack()
+
+processed_text_widget = tk.Text(processed_text_window, wrap="word", height=10, width=50)
 
 # Load window sizes from file
 load_size(root, "config/root.conf")
 load_size(play_window, "config/play_window.conf")
 load_size(word_display_window, "config/word_display_window.conf")
+load_size(word_window, "config/word_window.conf")
+load_size(processed_text_window, "config/processed_text_window.conf")
 
 
 def configure_and_save_size(event, window, filename):
@@ -168,6 +181,19 @@ word_display_window.bind(
         event, word_display_window, "config/word_display_window.conf"
     ),
 )
+word_window.bind(
+    "<Configure>",
+    lambda event: configure_and_save_size(
+        event, word_window, "config/word_window.conf"
+    ),
+)
+processed_text_window.bind(
+    "<Configure>",
+    lambda event: configure_and_save_size(
+        event, processed_text_window, "config/processed_text_window.conf"
+    ),
+)
+
 
 # Speed control slider
 speed_label = tk.Label(word_display_window, text="Speed:")
