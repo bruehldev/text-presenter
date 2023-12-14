@@ -52,7 +52,7 @@ def display_words(
                 word_pointer_start,
             )
         target_text_widget.pack()
-        processed_text_window.update()
+        target_text_widget.update()
 
         delay = int(1000 / speed)
         target_word_window.after(delay)
