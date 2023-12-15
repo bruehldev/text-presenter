@@ -3,6 +3,7 @@ from tts_manager import generate_tts
 from src.windows.tk.base_window import BaseWindow
 from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
+from src.windows.tk.audio_window import AudioWindow
 
 
 class MainWindow(BaseWindow):
@@ -24,9 +25,23 @@ class MainWindow(BaseWindow):
             self.text_window_button.config(text="Open Text Window")
         self.text_window_button.pack()
 
+        # Audio Window
+        self.audio_window = AudioWindow(tk.Toplevel(self.master))
+        self.audio_window_button = tk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_audio_window_button("Audio Window"),
+        )
+        if self.audio_window.master.state() == "normal":
+            self.audio_window_button.config(text=f"Close Audio Window")
+        else:
+            self.audio_window_button.config(text="Open Audio Window")
+
+        self.audio_window_button.pack()
+
         # Text Input Window
         self.text_input_window = TextInputWindow(
-            tk.Toplevel(self.master), self.text_window
+            tk.Toplevel(self.master), self.text_window, self.audio_window
         )
         self.text_input_button = tk.Button(
             self.frame,
@@ -54,3 +69,11 @@ class MainWindow(BaseWindow):
         else:
             self.text_window.master.deiconify()
             self.text_window_button.config(text=f"Close {name}")
+
+    def toggle_audio_window_button(self, name):
+        if self.audio_window.master.state() == "normal":
+            self.audio_window.master.withdraw()
+            self.audio_window_button.config(text=f"Open {name}")
+        else:
+            self.audio_window.master.deiconify()
+            self.audio_window_button.config(text=f"Close {name}")
