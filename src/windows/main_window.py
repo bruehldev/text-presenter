@@ -9,23 +9,24 @@ class MainWindow(BaseWindow):
         super().__init__(master, "Options", "config/root.conf")
 
         self.frame.pack()
+
+        # Text Input
         self.text_input_window = TextInputWindow(tk.Toplevel(self.master))
-        self.text_input_window_state = self.text_input_window.master.state()
-        self.button1 = tk.Button(
+        self.text_input_button = tk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_button("Text Input"),
+            command=lambda: self.toggle_text_input_window_button("Text Input"),
         )
-        if self.text_input_window_state == "normal":
-            self.button1.config(text=f"Close Text Input")
+        if self.text_input_window.master.state() == "normal":
+            self.text_input_button.config(text=f"Close Text Input")
         else:
-            self.button1.config(text="Open Text Input")
-        self.button1.pack()
+            self.text_input_button.config(text="Open Text Input")
+        self.text_input_button.pack()
 
-    def toggle_button(self, name):
+    def toggle_text_input_window_button(self, name):
         if self.text_input_window.master.state() == "normal":
             self.text_input_window.master.withdraw()
-            self.button1.config(text=f"Open {name}")
+            self.text_input_button.config(text=f"Open {name}")
         else:
             self.text_input_window.master.deiconify()
-            self.button1.config(text=f"Close {name}")
+            self.text_input_button.config(text=f"Close {name}")
