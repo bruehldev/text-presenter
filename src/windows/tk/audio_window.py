@@ -7,10 +7,21 @@ from src.windows.tk.base_window import BaseWindow
 
 
 class AudioWindow(BaseWindow):
-    def __init__(self, master):
+    def __init__(
+        self,
+        master,
+        target_text_widget,
+        target_word_window,
+        target_word_label,
+        speed,
+    ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
         self.sentences = None
-        print(self.sentences)
+        self.target_text_widget = target_text_widget
+        self.target_word_window = target_word_window
+        self.target_word_label = target_word_label
+        self.speed = speed
+
         self.play_button = tk.Button(
             self.master,
             text="Play",
@@ -40,12 +51,39 @@ class AudioWindow(BaseWindow):
 
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
-            print(self.sentences[index])
-            print(file)
+            # update rsvp with sentence
+            self.target_word_label.config(text=self.sentences[index])
+            self.target_word_window.update()
+
+            # update text widget with highlighted sentence
+            word_pointer_start = "1.0"
+            word_pointer_end = "1.0"
+            sentence = self.sentences[index]
+            word_pointer_start = self.target_text_widget.search(
+                sentence, word_pointer_end, stopindex="end"
+            )
+            word_pointer_end = f"{word_pointer_start}+{len(sentence)}c"
+
+            self.target_text_widget.tag_add(
+                "highlight", word_pointer_start, word_pointer_end
+            )
+
+            self.target_text_widget.tag_config("highlight", background="yellow")
+
+            # unmark previous sentence
+            if index > 0:
+                self.target_text_widget.tag_remove(
+                    "highlight",
+                    f"{word_pointer_start}-{len(self.sentences[index-1])+1}c",
+                    word_pointer_start,
+                )
+            self.target_text_widget.pack()
+            self.target_text_widget.update()
 
             play_audio_file(file)
 
-        # print also sentence
+        # remove highlight
+        self.target_text_widget.tag_remove("highlight", "1.0", "end")
 
     def stop_audio(self):
         stop_audio()

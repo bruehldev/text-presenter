@@ -38,8 +38,30 @@ class MainWindow(BaseWindow):
             self.rsvp_window_button.config(text="Open RSVP Window")
         self.rsvp_window_button.pack()
 
+        # Speed control slider
+        self.speed_label = tk.Label(self.frame, text="Speed:")
+        self.speed_label.pack()
+
+        self.speed_var = tk.DoubleVar()
+        self.speed_slider = tk.Scale(
+            self.frame,
+            from_=0.1,
+            to=2.0,
+            variable=self.speed_var,
+            length=200,
+            orient="horizontal",
+        )
+        self.speed_slider.set(1.0)
+        self.speed_slider.pack()
+
         # Audio Window
-        self.audio_window = AudioWindow(tk.Toplevel(self.master))
+        self.audio_window = AudioWindow(
+            tk.Toplevel(self.master),
+            self.text_window.text_widget,
+            self.rsvp_window.master,
+            self.rsvp_window.word_label,
+            self.speed_var.get(),
+        )
         self.audio_window_button = tk.Button(
             self.frame,
             text="",
@@ -66,22 +88,6 @@ class MainWindow(BaseWindow):
         else:
             self.text_input_button.config(text="Open Text Input")
         self.text_input_button.pack()
-
-        # Speed control slider
-        self.speed_label = tk.Label(self.frame, text="Speed:")
-        self.speed_label.pack()
-
-        self.speed_var = tk.DoubleVar()
-        self.speed_slider = tk.Scale(
-            self.frame,
-            from_=0.1,
-            to=2.0,
-            variable=self.speed_var,
-            length=200,
-            orient="horizontal",
-        )
-        self.speed_slider.set(1.0)
-        self.speed_slider.pack()
 
         # Start display words button
         self.start_button = tk.Button(
@@ -114,7 +120,6 @@ class MainWindow(BaseWindow):
             target_word_window.update()
 
             # use index to highlight the word in the text widget
-            # print word in the text widget
             word_pointer_start = target_text_widget.search(
                 word, word_pointer_end, stopindex="end"
             )
