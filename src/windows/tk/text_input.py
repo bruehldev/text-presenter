@@ -1,6 +1,8 @@
 import tkinter as tk
 from src.windows.tk.base_window import BaseWindow
 import nltk
+from src.services.headline_generator import generate_headline
+
 
 nltk.download("punkt")
 
@@ -26,3 +28,8 @@ class TextInputWindow(BaseWindow):
         self.text_window.text_widget.delete("1.0", "end")
         self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
         self.audio_window.sentences = self.sentences
+
+        # generate headline
+        headline = generate_headline(self.text)
+        self.text_window.headline.config(text=headline)
+        self.text_window.master.update()
