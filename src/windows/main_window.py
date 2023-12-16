@@ -107,8 +107,6 @@ class MainWindow(BaseWindow):
     def display_words(
         self, speed, words, target_text_widget, target_word_label, target_word_window
     ):
-        # add text to the widget
-        target_text_widget.insert("1.0", words)
         # create text index
         word_pointer_start = "1.0"
         word_pointer_end = "1.0"
@@ -146,6 +144,8 @@ class MainWindow(BaseWindow):
 
         # unmark all
         target_text_widget.tag_remove("highlight", "1.0", "end")
+        # reset word label
+        target_word_label.config(text="")
 
     def toggle_text_input_window_button(self, name):
         if self.text_input_window.master.state() == "normal":
