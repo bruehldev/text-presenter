@@ -24,8 +24,8 @@
     conda activate textpresentor
     ```
 
-2. Start main.py
+2. Start application
   - Run:
     ```
-    python main.py
+    python app.py
     ```
