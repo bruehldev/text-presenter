@@ -29,3 +29,10 @@ def play_audio_file(file):
         pygame.mixer.quit()
     else:
         messagebox.showwarning("File Not Found", "No audio file found.")
+
+
+def delete_audio_files():
+    folder = "audios"
+    audio_files = os.listdir(folder)
+    for filename in audio_files:
+        os.remove(os.path.join(folder, filename))

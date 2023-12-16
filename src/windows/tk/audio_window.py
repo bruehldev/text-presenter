@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tts_manager import generate_tts
-from audio_manager import stop_audio, play_audio_file
+from audio_manager import stop_audio, play_audio_file, delete_audio_files
 from src.windows.tk.base_window import BaseWindow
 
 
@@ -56,17 +56,15 @@ class AudioWindow(BaseWindow):
             self.target_word_window.update()
 
             # update text widget with highlighted sentence
-            word_pointer_start = "1.0"
-            word_pointer_end = "1.0"
+            pointer_start = "1.0"
+            pointer_end = "1.0"
             sentence = self.sentences[index]
-            word_pointer_start = self.target_text_widget.search(
-                sentence, word_pointer_end, stopindex="end"
+            pointer_start = self.target_text_widget.search(
+                sentence, pointer_end, stopindex="end"
             )
-            word_pointer_end = f"{word_pointer_start}+{len(sentence)}c"
+            pointer_end = f"{pointer_start}+{len(sentence)}c"
 
-            self.target_text_widget.tag_add(
-                "highlight", word_pointer_start, word_pointer_end
-            )
+            self.target_text_widget.tag_add("highlight", pointer_start, pointer_end)
 
             self.target_text_widget.tag_config("highlight", background="yellow")
 
@@ -74,8 +72,8 @@ class AudioWindow(BaseWindow):
             if index > 0:
                 self.target_text_widget.tag_remove(
                     "highlight",
-                    f"{word_pointer_start}-{len(self.sentences[index-1])+1}c",
-                    word_pointer_start,
+                    f"{pointer_start}-{len(self.sentences[index-1])+1}c",
+                    pointer_start,
                 )
             self.target_text_widget.pack()
             self.target_text_widget.update()
@@ -89,6 +87,9 @@ class AudioWindow(BaseWindow):
         stop_audio()
 
     def process_text(self, sentences):
+        # delete previous audio files
+        delete_audio_files()
+
         if sentences is None:
             messagebox.showerror("No Text", "No text to process!")
             return
