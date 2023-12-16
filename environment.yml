@@ -14,3 +14,4 @@ dependencies:
     - TTS
     - tk
     - pygame
+    - pydub
