@@ -1,6 +1,6 @@
 import numpy as np
 from TTS.api import TTS
-import audio_manager as am
+import services.audio_manager as am
 from TTS.api import TTS
 from pydub.playback import play
 

@@ -2,7 +2,7 @@ import tkinter as tk
 from src.windows.tk.base_window import BaseWindow
 import nltk
 from src.services.headline_generator import generate_headline
-from audio_manager import delete_audio_files
+from services.audio_manager import delete_audio_files
 
 nltk.download("punkt")
 

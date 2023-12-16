@@ -1,5 +1,10 @@
 import tkinter as tk
-from config_manager import load_size, save_size, load_toggle_state, save_toggle_state
+from services.config_manager import (
+    load_size,
+    save_size,
+    load_toggle_state,
+    save_toggle_state,
+)
 
 
 class BaseWindow:

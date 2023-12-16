@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from tts_manager import generate_tts
-from audio_manager import stop_audio, play_audio_file, delete_audio_files
+from services.audio_manager import stop_audio, play_audio_file, delete_audio_files
 from src.windows.tk.base_window import BaseWindow
 
 
