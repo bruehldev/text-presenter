@@ -1,5 +1,4 @@
 import tkinter as tk
-from tts_manager import generate_tts
 from src.windows.tk.base_window import BaseWindow
 from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow

@@ -16,3 +16,16 @@ def play_audio():
 
 def stop_audio():
     pygame.mixer.music.stop()
+
+
+def play_audio_file(file):
+    if os.path.exists(file):
+        pygame.init()
+        pygame.mixer.music.load(file)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+
+        pygame.mixer.quit()
+    else:
+        messagebox.showwarning("File Not Found", "No audio file found.")

@@ -1,6 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
-from tts_manager import generate_tts
 from src.windows.tk.base_window import BaseWindow
 
 

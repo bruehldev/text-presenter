@@ -1,10 +1,35 @@
+import numpy as np
 from TTS.api import TTS
-import torch
+import audio_manager as am
+from TTS.api import TTS
+from pydub.playback import play
 
 
-def generate_tts(text):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
-    tts.tts_to_file(
-        text=text, speaker_wav="example_1.wav", language="en", file_path="output.wav"
-    )
+""" vocoder_models
+ 1: vocoder_models/universal/libri-tts/wavegrad
+ 2: vocoder_models/universal/libri-tts/fullband-melgan
+ 3: vocoder_models/en/ek1/wavegrad
+ 4: vocoder_models/en/ljspeech/multiband-melgan
+ 5: vocoder_models/en/ljspeech/hifigan_v2
+ 6: vocoder_models/en/ljspeech/univnet
+ 7: vocoder_models/en/blizzard2013/hifigan_v2
+ 8: vocoder_models/en/vctk/hifigan_v2
+ 9: vocoder_models/en/sam/hifigan_v2
+ 10: vocoder_models/nl/mai/parallel-wavegan
+ 11: vocoder_models/de/thorsten/wavegrad
+ 12: vocoder_models/de/thorsten/fullband-melgan
+ 13: vocoder_models/de/thorsten/hifigan_v1
+ 14: vocoder_models/ja/kokoro/hifigan_v1
+ 15: vocoder_models/uk/mai/multiband-melgan
+ 16: vocoder_models/tr/common-voice/hifigan
+ 17: vocoder_models/be/common-voice/hifigan
+"""
+
+
+def generate_tts(sentences):
+    for i in range(len(sentences)):
+        tts = TTS(
+            model_name="tts_models/en/ljspeech/vits",
+            gpu=True,
+        )
+        tts.tts_to_file(text=sentences[i], file_path=f"audios/audio_{i}.wav")

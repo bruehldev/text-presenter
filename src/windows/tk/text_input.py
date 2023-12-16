@@ -1,5 +1,8 @@
 import tkinter as tk
 from src.windows.tk.base_window import BaseWindow
+import nltk
+
+nltk.download("punkt")
 
 
 class TextInputWindow(BaseWindow):
@@ -12,12 +15,14 @@ class TextInputWindow(BaseWindow):
 
         self.send_button = tk.Button(
             self.master,
-            text="Send",
+            text="Apply",
             command=self.update_text_window,
         )
         self.send_button.pack()
 
     def update_text_window(self):
+        self.text = self.text_input.get("1.0", "end-1c")
+        self.sentences = nltk.sent_tokenize(self.text)
         self.text_window.text_widget.delete("1.0", "end")
         self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
-        self.audio_window.words = self.text_window.text_widget.get("1.0", "end")
+        self.audio_window.sentences = self.sentences
