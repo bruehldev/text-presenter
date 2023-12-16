@@ -72,7 +72,7 @@ class AudioWindow(BaseWindow):
             if index > 0:
                 self.target_text_widget.tag_remove(
                     "highlight",
-                    f"{pointer_start}-{len(self.sentences[index-1])+1}c",
+                    f"{pointer_start}-{len(self.sentences[index-1])+2}c",
                     pointer_start,
                 )
             self.target_text_widget.pack()
