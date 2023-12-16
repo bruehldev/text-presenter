@@ -39,9 +39,6 @@ class MainWindow(BaseWindow):
         self.rsvp_window_button.pack()
 
         # Speed control slider
-        self.speed_label = tk.Label(self.frame, text="Speed:")
-        self.speed_label.pack()
-
         self.speed_var = tk.DoubleVar()
         self.speed_slider = tk.Scale(
             self.frame,
@@ -103,6 +100,10 @@ class MainWindow(BaseWindow):
         )
         self.start_button.pack()
 
+        # Place Speed label, Speed slider, and Start button at the bottom
+        self.speed_slider.pack(side=tk.BOTTOM, anchor=tk.W)
+        self.start_button.pack(side=tk.BOTTOM, anchor=tk.S)
+
     def display_words(
         self, speed, words, target_text_widget, target_word_label, target_word_window
     ):
@@ -142,6 +143,9 @@ class MainWindow(BaseWindow):
 
             delay = int(1000 / speed)
             target_word_window.after(delay)
+
+        # unmark all
+        target_text_widget.tag_remove("highlight", "1.0", "end")
 
     def toggle_text_input_window_button(self, name):
         if self.text_input_window.master.state() == "normal":
