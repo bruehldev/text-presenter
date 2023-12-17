@@ -3,11 +3,9 @@ from tkinter import ttk
 from src.windows.tk.base_window import BaseWindow
 
 
-class InformationRetrivalWindow(BaseWindow):
+class InformationWindow(BaseWindow):
     def __init__(self, master):
-        super().__init__(
-            master, "Information Retrival", "config/information_retrival.conf"
-        )
+        super().__init__(master, "Information Retrival", "config/information.conf")
 
         # Dropdown (Combobox)
         self.dropdown_var = tk.StringVar(value="Keyphrases")
@@ -52,5 +50,5 @@ class InformationRetrivalWindow(BaseWindow):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    window = InformationRetrivalWindow(root)
+    window = InformationWindow(root)
     root.mainloop()

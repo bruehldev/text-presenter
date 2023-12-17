@@ -4,7 +4,7 @@ from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
 from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.rsvp_window import rsvpWindow
-from src.windows.tk.keyphrase_window import InformationRetrivalWindow
+from src.windows.tk.information_window import InformationWindow
 
 
 class MainWindow(BaseWindow):
@@ -39,22 +39,18 @@ class MainWindow(BaseWindow):
             self.rsvp_window_button.config(text="Open RSVP Window")
         self.rsvp_window_button.pack()
 
-        # Information Retrival Window
-        self.information_retrival_window = InformationRetrivalWindow(
-            tk.Toplevel(self.master)
-        )
-        self.keyphrase_window_button = tk.Button(
+        # Information Window
+        self.information_window = InformationWindow(tk.Toplevel(self.master))
+        self.information_window_button = tk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_information_retrival_window_button(
-                "Information Retrival Window"
-            ),
+            command=lambda: self.toggle_information_window_button("Information Window"),
         )
-        if self.information_retrival_window.master.state() == "normal":
-            self.keyphrase_window_button.config(text=f"Close Information Retrival")
+        if self.information_window.master.state() == "normal":
+            self.information_window_button.config(text=f"Close Information Retrival")
         else:
-            self.keyphrase_window_button.config(text="Open Information Retrival")
-        self.keyphrase_window_button.pack()
+            self.information_window_button.config(text="Open Information Retrival")
+        self.information_window_button.pack()
 
         # Speed control slider
         self.speed_var = tk.DoubleVar()
@@ -94,7 +90,7 @@ class MainWindow(BaseWindow):
             tk.Toplevel(self.master),
             self.text_window,
             self.audio_window,
-            self.information_retrival_window,
+            self.information_window,
         )
         self.text_input_button = tk.Button(
             self.frame,
@@ -200,10 +196,10 @@ class MainWindow(BaseWindow):
             self.rsvp_window.master.deiconify()
             self.rsvp_window_button.config(text=f"Close {name}")
 
-    def toggle_information_retrival_window_button(self, name):
-        if self.information_retrival_window.master.state() == "normal":
-            self.information_retrival_window.master.withdraw()
-            self.keyphrase_window_button.config(text=f"Open {name}")
+    def toggle_information_window_button(self, name):
+        if self.information_window.master.state() == "normal":
+            self.information_window.master.withdraw()
+            self.information_window_button.config(text=f"Open {name}")
         else:
-            self.information_retrival_window.master.deiconify()
-            self.keyphrase_window_button.config(text=f"Close {name}")
+            self.information_window.master.deiconify()
+            self.information_window_button.config(text=f"Close {name}")

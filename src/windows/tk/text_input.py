@@ -9,13 +9,13 @@ nltk.download("punkt")
 
 
 class TextInputWindow(BaseWindow):
-    def __init__(self, master, text_window, audio_window, keyphrase_window):
+    def __init__(self, master, text_window, audio_window, information_window):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.text_input = tk.Text(self.master, state=tk.NORMAL)
         self.text_input.pack()
         self.text_window = text_window
         self.audio_window = audio_window
-        self.information_retrival_window = keyphrase_window
+        self.information_window = information_window
 
         self.send_button = tk.Button(
             self.master,
@@ -37,11 +37,9 @@ class TextInputWindow(BaseWindow):
 
         # extract keyphrases
         keyphrases = extract_keyphrases(self.text)
-        self.information_retrival_window.keyphrases_listbox.delete(0, tk.END)
+        self.information_window.keyphrases_listbox.delete(0, tk.END)
         for keyphrase in keyphrases:
-            self.information_retrival_window.keyphrases_listbox.insert(
-                tk.END, keyphrase
-            )
+            self.information_window.keyphrases_listbox.insert(tk.END, keyphrase)
 
         # generate headline
         headline = generate_headline(self.text)
