@@ -22,6 +22,8 @@ from pydub.playback import play
  17: vocoder_models/be/common-voice/hifigan
 """
 
+# TODO make vocoder selectable
+
 
 def generate_tts(sentences):
     for i in range(len(sentences)):

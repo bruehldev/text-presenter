@@ -4,6 +4,10 @@ import nltk
 from src.services.headline_generator import generate_headline
 from src.services.audio_manager import delete_audio_files
 from src.services.keyphrase_extraction import extract_keyphrases
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk import FreqDist
+
 
 nltk.download("punkt")
 
@@ -36,15 +40,25 @@ class TextInputWindow(BaseWindow):
         self.text_window.text_widget.config(state=tk.DISABLED)
         self.audio_window.sentences = self.sentences
 
-        # extract keyphrases
+        # extract and set frequent words
+        words = word_tokenize(self.text)
+        stop_words = set(stopwords.words("english"))
+        filtered_words = [word for word in words if word.lower() not in stop_words]
+        text_without_stopwords = " ".join(filtered_words)
+        text_without_stopwords_tokens = word_tokenize(text_without_stopwords)
+        freq_dist_without_stopwords = FreqDist(text_without_stopwords_tokens)
+        self.information_window.frequent_words = (
+            freq_dist_without_stopwords.most_common()
+        )
+
+        # extract and set keyphrases
         keyphrases = extract_keyphrases(self.text)
         self.information_window.keyphrases_listbox.delete(0, tk.END)
         for keyphrase in keyphrases:
             self.information_window.keyphrases_listbox.insert(tk.END, keyphrase)
 
-        # generate headline
+        # generate and set headline
         headline = generate_headline(self.text)
         self.text_window.headline.config(text=headline)
         self.text_window.master.update()
-
         self.audio_window.title = headline

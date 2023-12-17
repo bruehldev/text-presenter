@@ -12,7 +12,7 @@ class InformationWindow(BaseWindow):
         self.dropdown = ttk.Combobox(
             self.master,
             textvariable=self.dropdown_var,
-            values=["Keyphrases", "Listbox2"],
+            values=["Keyphrases", "Listbox2", "Frequent Words"],
         )
         self.dropdown.pack()
 
@@ -23,13 +23,15 @@ class InformationWindow(BaseWindow):
         self.keyphrases_listbox = tk.Listbox(self.master)
         self.keyphrases_listbox.pack(fill="both", expand=True)
 
+        # Frequent words
+        self.frequent_words = None
+        self.frequent_words_listbox = tk.Listbox(self.master)
+
         # Additional listbox for Listbox2
         self.listbox2 = tk.Listbox(self.master)
 
         # Initial setting
-        self.on_dropdown_change(
-            None
-        )  # Call the function to initialize the correct listbox
+        self.on_dropdown_change(None)
 
     def on_dropdown_change(self, event):
         selected_value = self.dropdown_var.get()
@@ -39,16 +41,16 @@ class InformationWindow(BaseWindow):
         self.listbox2.pack_forget()
 
         if selected_value == "Keyphrases":
+            self.keyphrases_listbox.delete(0, tk.END)
             self.keyphrases_listbox.pack(fill="both", expand=True)
+        elif selected_value == "Frequent Words":
+            self.frequent_words_listbox.delete(0, tk.END)
+            for word, frequency in self.frequent_words:
+                self.frequent_words_listbox.insert(tk.END, f"{word}: {frequency} times")
+            self.frequent_words_listbox.pack(fill="both", expand=True)
         elif selected_value == "Listbox2":
             # Show the second listbox with items 1, 2, 3
             self.listbox2.pack(fill="both", expand=True)
             self.listbox2.delete(0, tk.END)
             for item in ["1", "2", "3"]:
                 self.listbox2.insert(tk.END, item)
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    window = InformationWindow(root)
-    root.mainloop()
