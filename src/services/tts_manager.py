@@ -30,3 +30,11 @@ def generate_tts(sentences):
             gpu=True,
         )
         tts.tts_to_file(text=sentences[i], file_path=f"audios/audio_{i}.wav")
+
+
+def generate_tts_title(title):
+    tts = TTS(
+        model_name="tts_models/en/ljspeech/vits",
+        gpu=True,
+    )
+    tts.tts_to_file(text=title, file_path=f"audios/title.wav")

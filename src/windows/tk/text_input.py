@@ -26,6 +26,7 @@ class TextInputWindow(BaseWindow):
 
     def update_text_window(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
+        # TODO: make any processing window optional. Open/Close windows which are selected
         # delete_audio_files()
         self.text = self.text_input.get("1.0", "end-1c")
         self.sentences = nltk.sent_tokenize(self.text)
@@ -45,3 +46,5 @@ class TextInputWindow(BaseWindow):
         headline = generate_headline(self.text)
         self.text_window.headline.config(text=headline)
         self.text_window.master.update()
+
+        self.audio_window.title = headline

@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import messagebox
-from src.services.tts_manager import generate_tts
+from src.services.tts_manager import generate_tts, generate_tts_title
 from src.services.audio_manager import stop_audio, play_audio_file, delete_audio_files
 from src.windows.tk.base_window import BaseWindow
 
@@ -16,6 +16,7 @@ class AudioWindow(BaseWindow):
         speed,
     ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
+        self.title = None
         self.sentences = None
         self.target_text_widget = target_text_widget
         self.target_word_window = target_word_window
@@ -39,7 +40,7 @@ class AudioWindow(BaseWindow):
         self.process_button = tk.Button(
             self.master,
             text="Process",
-            command=lambda: self.process_text(self.sentences),
+            command=lambda: self.process_text(self.sentences, self.title),
         )
         self.process_button.pack()
 
@@ -48,6 +49,13 @@ class AudioWindow(BaseWindow):
         folder = "audios"
         audio_files = os.listdir(folder)
         audio_files.sort()
+
+        # update rsvp with title
+        self.target_word_label.config(text="Title: " + self.title)
+        self.target_word_window.update()
+
+        # play title
+        play_audio_file(f"{folder}/title.wav")
 
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
@@ -86,7 +94,7 @@ class AudioWindow(BaseWindow):
     def stop_audio(self):
         stop_audio()
 
-    def process_text(self, sentences):
+    def process_text(self, sentences, title):
         # delete previous audio files
         delete_audio_files()
 
@@ -94,4 +102,5 @@ class AudioWindow(BaseWindow):
             messagebox.showerror("No Text", "No text to process!")
             return
         generate_tts(sentences)
+        generate_tts_title(title)
         messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
