@@ -1,5 +1,5 @@
 import tkinter as tk
-from services.config_manager import (
+from src.services.config_manager import (
     load_size,
     save_size,
     load_toggle_state,
