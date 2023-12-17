@@ -19,13 +19,15 @@ class InformationWindow(BaseWindow):
         # Bind a function to the dropdown selection change event
         self.dropdown.bind("<<ComboboxSelected>>", self.on_dropdown_change)
 
-        # Listbox
+        # Keyphrases
+        self.keyphrases = None
         self.keyphrases_listbox = tk.Listbox(self.master)
         self.keyphrases_listbox.pack(fill="both", expand=True)
 
         # Frequent words
         self.frequent_words = None
         self.frequent_words_listbox = tk.Listbox(self.master)
+        self.keyphrases_listbox.pack(fill="both", expand=True)
 
         # Additional listbox for Listbox2
         self.listbox2 = tk.Listbox(self.master)
@@ -38,14 +40,27 @@ class InformationWindow(BaseWindow):
 
         # Hide both listboxes initially
         self.keyphrases_listbox.pack_forget()
+        self.frequent_words_listbox.pack_forget()
         self.listbox2.pack_forget()
 
         if selected_value == "Keyphrases":
             self.keyphrases_listbox.delete(0, tk.END)
+            self.frequent_words_listbox.delete(0, tk.END)
+            if self.keyphrases is None:
+                return
+            for keyphrase in self.keyphrases:
+                self.keyphrases_listbox.insert(tk.END, keyphrase)
+
             self.keyphrases_listbox.pack(fill="both", expand=True)
         elif selected_value == "Frequent Words":
+            self.keyphrases_listbox.delete(0, tk.END)
             self.frequent_words_listbox.delete(0, tk.END)
+            if self.frequent_words is None:
+                return
             for word, frequency in self.frequent_words:
+                # if frequency is 1, keyphrase is not important
+                if frequency == 1:
+                    continue
                 self.frequent_words_listbox.insert(tk.END, f"{word}: {frequency} times")
             self.frequent_words_listbox.pack(fill="both", expand=True)
         elif selected_value == "Listbox2":

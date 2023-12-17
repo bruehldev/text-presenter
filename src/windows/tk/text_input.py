@@ -44,6 +44,8 @@ class TextInputWindow(BaseWindow):
         words = word_tokenize(self.text)
         stop_words = set(stopwords.words("english"))
         filtered_words = [word for word in words if word.lower() not in stop_words]
+        # remove punctuation and other special characters
+        filtered_words = [word for word in filtered_words if word.isalpha()]
         text_without_stopwords = " ".join(filtered_words)
         text_without_stopwords_tokens = word_tokenize(text_without_stopwords)
         freq_dist_without_stopwords = FreqDist(text_without_stopwords_tokens)
@@ -53,12 +55,14 @@ class TextInputWindow(BaseWindow):
 
         # extract and set keyphrases
         keyphrases = extract_keyphrases(self.text)
-        self.information_window.keyphrases_listbox.delete(0, tk.END)
-        for keyphrase in keyphrases:
-            self.information_window.keyphrases_listbox.insert(tk.END, keyphrase)
+        self.information_window.keyphrases = keyphrases
 
         # generate and set headline
         headline = generate_headline(self.text)
         self.text_window.headline.config(text=headline)
         self.text_window.master.update()
         self.audio_window.title = headline
+
+        # update information window
+        self.information_window.on_dropdown_change(None)
+        self.information_window.master.update()
