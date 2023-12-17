@@ -4,6 +4,7 @@ from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
 from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.rsvp_window import rsvpWindow
+from src.windows.tk.keyphrase_window import KeyphraseWindow
 
 
 class MainWindow(BaseWindow):
@@ -37,6 +38,19 @@ class MainWindow(BaseWindow):
         else:
             self.rsvp_window_button.config(text="Open RSVP Window")
         self.rsvp_window_button.pack()
+
+        # Keyphrase Window
+        self.keyphrase_window = KeyphraseWindow(tk.Toplevel(self.master))
+        self.keyphrase_window_button = tk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_keyphrase_window_button("Keyphrase Window"),
+        )
+        if self.keyphrase_window.master.state() == "normal":
+            self.keyphrase_window_button.config(text=f"Close Keyphrase Window")
+        else:
+            self.keyphrase_window_button.config(text="Open Keyphrase Window")
+        self.keyphrase_window_button.pack()
 
         # Speed control slider
         self.speed_var = tk.DoubleVar()
@@ -73,7 +87,10 @@ class MainWindow(BaseWindow):
 
         # Text Input Window
         self.text_input_window = TextInputWindow(
-            tk.Toplevel(self.master), self.text_window, self.audio_window
+            tk.Toplevel(self.master),
+            self.text_window,
+            self.audio_window,
+            self.keyphrase_window,
         )
         self.text_input_button = tk.Button(
             self.frame,
@@ -178,3 +195,11 @@ class MainWindow(BaseWindow):
         else:
             self.rsvp_window.master.deiconify()
             self.rsvp_window_button.config(text=f"Close {name}")
+
+    def toggle_keyphrase_window_button(self, name):
+        if self.keyphrase_window.master.state() == "normal":
+            self.keyphrase_window.master.withdraw()
+            self.keyphrase_window_button.config(text=f"Open {name}")
+        else:
+            self.keyphrase_window.master.deiconify()
+            self.keyphrase_window_button.config(text=f"Close {name}")
