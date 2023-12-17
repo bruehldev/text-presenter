@@ -15,7 +15,7 @@ class TextInputWindow(BaseWindow):
         self.text_input.pack()
         self.text_window = text_window
         self.audio_window = audio_window
-        self.keyphrase_window = keyphrase_window
+        self.information_retrival_window = keyphrase_window
 
         self.send_button = tk.Button(
             self.master,
@@ -37,9 +37,11 @@ class TextInputWindow(BaseWindow):
 
         # extract keyphrases
         keyphrases = extract_keyphrases(self.text)
-        self.keyphrase_window.listbox.delete(0, tk.END)
+        self.information_retrival_window.keyphrases_listbox.delete(0, tk.END)
         for keyphrase in keyphrases:
-            self.keyphrase_window.listbox.insert(tk.END, keyphrase)
+            self.information_retrival_window.keyphrases_listbox.insert(
+                tk.END, keyphrase
+            )
 
         # generate headline
         headline = generate_headline(self.text)
