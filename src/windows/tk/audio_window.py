@@ -57,7 +57,8 @@ class AudioWindow(BaseWindow):
         audio_files.sort()
 
         # update rsvp with title
-        self.target_word_label.config(text="Title: " + self.title)
+        self.target_word_label.config(text="Title: " + str(self.title))
+
         self.target_word_window.update()
 
         # play title
