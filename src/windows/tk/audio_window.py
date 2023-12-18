@@ -2,7 +2,13 @@ import os
 import tkinter as tk
 from tkinter import messagebox
 from src.services.tts_manager import generate_tts, generate_tts_title
-from src.services.audio_manager import stop_audio, play_audio_file, delete_audio_files
+from src.services.audio_manager import (
+    stop_audio,
+    play_audio_file,
+    delete_audio_files,
+    play_audio_file_channel,
+    stop_audio_channel,
+)
 from src.windows.tk.base_window import BaseWindow
 
 
@@ -46,7 +52,7 @@ class AudioWindow(BaseWindow):
 
     def play_audio(self):
         # play every audio file in the folder
-        folder = "audios"
+        folder = "audios/sentences"
         audio_files = os.listdir(folder)
         audio_files.sort()
 
@@ -55,7 +61,7 @@ class AudioWindow(BaseWindow):
         self.target_word_window.update()
 
         # play title
-        play_audio_file(f"{folder}/title.wav")
+        # play_audio_file_channel(f"{folder}/title.wav")
 
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
@@ -86,7 +92,7 @@ class AudioWindow(BaseWindow):
             self.target_text_widget.pack()
             self.target_text_widget.update()
 
-            play_audio_file(file)
+            play_audio_file_channel(file)
 
         # remove highlight
         self.target_text_widget.tag_remove("highlight", "1.0", "end")

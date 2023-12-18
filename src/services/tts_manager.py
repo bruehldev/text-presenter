@@ -1,5 +1,5 @@
 from TTS.api import TTS
-from pydub.playback import play
+import os
 
 
 """ vocoder_models
@@ -25,16 +25,23 @@ from pydub.playback import play
 # TODO make vocoder selectable
 
 
+def create_folder(folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+
 def generate_tts(sentences):
+    create_folder("audios/sentences")
     for i in range(len(sentences)):
         tts = TTS(
             model_name="tts_models/en/ljspeech/vits",
             gpu=True,
         )
-        tts.tts_to_file(text=sentences[i], file_path=f"audios/audio_{i}.wav")
+        tts.tts_to_file(text=sentences[i], file_path=f"audios/sentences/audio_{i}.wav")
 
 
 def generate_tts_title(title):
+    create_folder("audios")
     tts = TTS(
         model_name="tts_models/en/ljspeech/vits",
         gpu=True,
