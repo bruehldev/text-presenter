@@ -7,5 +7,5 @@ class rsvpWindow(BaseWindow):
     def __init__(self, master):
         super().__init__(master, "rsvp Window", "config/rsvp_window.conf")
         self.word = None
-        self.word_label = tk.Label(self.master, text=self.word)
-        self.word_label.pack()
+        self.word_label = tk.Label(self.master, text=self.word, font=("Helvetica", 24))
+        self.word_label.pack(fill=tk.BOTH, expand=True)

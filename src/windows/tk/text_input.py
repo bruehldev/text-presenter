@@ -43,6 +43,7 @@ class TextInputWindow(BaseWindow):
         # extract and set frequent words
         words = word_tokenize(self.text)
         stop_words = set(stopwords.words("english"))
+        # remove stop words
         filtered_words = [word for word in words if word.lower() not in stop_words]
         # remove punctuation and other special characters
         filtered_words = [word for word in filtered_words if word.isalpha()]
