@@ -46,7 +46,7 @@ class AudioWindow(BaseWindow):
         self.process_button = tk.Button(
             self.master,
             text="Process",
-            command=lambda: self.process_text(self.sentences, self.title),
+            command=lambda: self.generate_audio(self.sentences, self.title),
         )
         self.process_button.pack()
 
@@ -100,7 +100,7 @@ class AudioWindow(BaseWindow):
     def stop_audio(self):
         stop_audio()
 
-    def process_text(self, sentences, title):
+    def generate_audio(self, sentences, title):
         # delete previous audio files
         delete_audio_files()
 
