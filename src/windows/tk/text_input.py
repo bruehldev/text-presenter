@@ -21,7 +21,6 @@ class TextInputWindow(BaseWindow):
         self.audio_window = audio_window
         self.information_window = information_window
 
-        # Load checkbox states from the config
         self.load_checkbox_states()
 
         self.audio_processing_var = tk.IntVar(value=self.audio_checkbox_state)

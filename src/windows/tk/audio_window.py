@@ -1,7 +1,8 @@
 import os
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
-from src.services.tts_manager import generate_tts, generate_tts_title
+from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
 from src.services.audio_manager import (
     stop_audio,
     play_audio_file,
@@ -10,6 +11,7 @@ from src.services.audio_manager import (
     stop_audio_channel,
 )
 from src.windows.tk.base_window import BaseWindow
+from src.services.config_manager import get_config_parameter, set_config_parameter
 
 
 class AudioWindow(BaseWindow):
@@ -28,6 +30,23 @@ class AudioWindow(BaseWindow):
         self.target_word_window = target_word_window
         self.target_word_label = target_word_label
         self.speed = speed
+
+        # Dropdown to select the model
+        self.model_names = get_model_names()
+        self.selected_model = tk.StringVar()
+        self.load_model_name()
+        self.model_dropdown = ttk.Combobox(
+            self.master,
+            textvariable=self.selected_model,
+            values=self.model_names,
+            state="readonly",
+            width=50,
+        )
+        self.model_dropdown.pack()
+
+        self.model_dropdown.bind(
+            "<<ComboboxSelected>>", lambda event: self.save_model_name()
+        )
 
         self.play_button = tk.Button(
             self.master,
@@ -50,6 +69,12 @@ class AudioWindow(BaseWindow):
         )
         self.process_button.pack()
 
+    def load_model_name(self):
+        self.selected_model.set(get_config_parameter("audio_window", "model_name"))
+
+    def save_model_name(self):
+        set_config_parameter("audio_window", "model_name", self.selected_model.get())
+
     def play_audio(self):
         # play every audio file in the folder
         folder = "audios/sentences"
@@ -69,6 +94,10 @@ class AudioWindow(BaseWindow):
 
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
+
+            if self.sentences is None:
+                messagebox.showerror("No Text", "No text to process!")
+                return
             # update rsvp with sentence
             self.target_word_label.config(text=self.sentences[index])
             self.target_word_window.update()
@@ -111,6 +140,6 @@ class AudioWindow(BaseWindow):
         if sentences is None:
             messagebox.showerror("No Text", "No text to process!")
             return
-        generate_tts(sentences)
-        generate_tts_title(title)
+        generate_tts(sentences, self.selected_model.get())
+        generate_tts_title(title, self.selected_model.get())
         messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
