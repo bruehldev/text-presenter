@@ -7,6 +7,7 @@ from src.services.keyphrase_extraction import extract_keyphrases
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
+from src.services.config_manager import get_config_parameter, set_config_parameter
 
 nltk.download("punkt")
 
@@ -20,8 +21,13 @@ class TextInputWindow(BaseWindow):
         self.audio_window = audio_window
         self.information_window = information_window
 
-        self.audio_processing_var = tk.IntVar()
-        self.information_processing_var = tk.IntVar()
+        # Load checkbox states from the config
+        self.load_checkbox_states()
+
+        self.audio_processing_var = tk.IntVar(value=self.audio_checkbox_state)
+        self.information_processing_var = tk.IntVar(
+            value=self.information_checkbox_state
+        )
 
         # Checkboxes for processing windows
         tk.Checkbutton(
@@ -29,7 +35,7 @@ class TextInputWindow(BaseWindow):
         ).pack()
         tk.Checkbutton(
             self.master,
-            text="Information Retrival",
+            text="Information Retrieval",
             variable=self.information_processing_var,
         ).pack()
 
@@ -40,12 +46,30 @@ class TextInputWindow(BaseWindow):
         )
         self.send_button.pack()
 
+    def load_checkbox_states(self):
+        self.audio_checkbox_state = get_config_parameter(
+            "text_input", "audio_processing"
+        )
+        self.information_checkbox_state = get_config_parameter(
+            "text_input", "information_processing"
+        )
+
+    def save_checkbox_states(self):
+        set_config_parameter(
+            "text_input", "audio_processing", self.audio_processing_var.get()
+        )
+        set_config_parameter(
+            "text_input",
+            "information_processing",
+            self.information_processing_var.get(),
+        )
+
     def update_text_window(self):
+        self.save_checkbox_states()
         # Check the state of checkboxes before processing
         self.process_text()
 
         if self.audio_processing_var.get():
-            # self.process_audio()
             self.audio_window.generate_audio(self.sentences, self.title)
 
         if self.information_processing_var.get():

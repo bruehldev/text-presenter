@@ -1,5 +1,5 @@
 import tkinter as tk
-from src.services.config_manager import load_config, save_config
+from src.services.config_manager import load_window_config, save_window_config
 
 
 class BaseWindow:
@@ -43,7 +43,7 @@ class BaseWindow:
             )
 
     def load_config(self):
-        load_config(self.master, self.config_filename)
+        load_window_config(self.master, self.config_filename)
 
     def save_config(self):
-        save_config(self.master, self.config_filename)
+        save_window_config(self.master, self.config_filename)
