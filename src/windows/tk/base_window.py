@@ -1,10 +1,5 @@
 import tkinter as tk
-from src.services.config_manager import (
-    load_size,
-    save_size,
-    load_toggle_state,
-    save_toggle_state,
-)
+from src.services.config_manager import load_config, save_config
 
 
 class BaseWindow:
@@ -16,15 +11,14 @@ class BaseWindow:
         self.config_filename = config_filename
 
         self.master.title(self.title)
-        self.load_size()
-        self.load_toggle_state()
+        self.load_config()
         self.bind_configure_and_save_size()
         self.bind_save_toggle_state()
 
     def configure_and_save_size(self, event):
         if self.master:
             self.master.update()
-            self.save_size()
+            self.save_config()
 
     def bind_configure_and_save_size(self):
         if self.master:
@@ -37,35 +31,19 @@ class BaseWindow:
         if self.master:
             self.master.bind(
                 "<Unmap>",
-                lambda event: self.save_toggle_state(),
+                lambda event: self.save_config(),
             )
             self.master.bind(
                 "<Map>",
-                lambda event: self.save_toggle_state(),
+                lambda event: self.save_config(),
             )
             self.master.bind(
                 "<Destroy>",
-                lambda event: self.save_toggle_state(),
+                lambda event: self.save_config(),
             )
 
-    def load_size(self):
-        if self.master:
-            load_size(self.master, self.config_filename)
+    def load_config(self):
+        load_config(self.master, self.config_filename)
 
-    def save_size(self):
-        if self.master:
-            save_size(self.master, self.config_filename)
-
-    def toggle(self):
-        if self.master.state() == "normal":
-            self.master.withdraw()
-        else:
-            self.master.deiconify()
-
-    def load_toggle_state(self):
-        if self.master:
-            load_toggle_state(self.master, self.config_filename + "_toggle")
-
-    def save_toggle_state(self):
-        if self.master:
-            save_toggle_state(self.master, self.config_filename + "_toggle")
+    def save_config(self):
+        save_config(self.master, self.config_filename)
