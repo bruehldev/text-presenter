@@ -54,6 +54,9 @@ class AudioWindow(BaseWindow):
         # play every audio file in the folder
         folder = "audios/sentences"
         audio_files = os.listdir(folder)
+        if len(audio_files) == 0:
+            messagebox.showerror("No Audio", "No audio to play!")
+            return
         audio_files.sort()
 
         # update rsvp with title

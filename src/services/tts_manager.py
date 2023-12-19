@@ -41,6 +41,8 @@ def generate_tts(sentences):
 
 
 def generate_tts_title(title):
+    if title is None:
+        return
     create_folder("audios")
     tts = TTS(
         model_name="tts_models/en/ljspeech/vits",

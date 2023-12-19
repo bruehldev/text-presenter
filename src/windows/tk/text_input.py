@@ -46,7 +46,6 @@ class TextInputWindow(BaseWindow):
 
         if self.audio_processing_var.get():
             # self.process_audio()
-            self.audio_window.sentences = self.sentences
             self.audio_window.generate_audio(self.sentences, self.title)
 
         if self.information_processing_var.get():
@@ -89,3 +88,4 @@ class TextInputWindow(BaseWindow):
         self.text_window.text_widget.delete("1.0", "end")
         self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
         self.text_window.text_widget.config(state=tk.DISABLED)
+        self.audio_window.sentences = self.sentences
