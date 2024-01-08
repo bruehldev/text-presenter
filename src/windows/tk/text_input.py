@@ -10,6 +10,7 @@ from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
 
 nltk.download("punkt")
+nltk.download("stopwords")
 
 
 class TextInputWindow(BaseWindow):

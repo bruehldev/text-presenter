@@ -23,12 +23,16 @@ def load_window_config(window, filename):
 
 def save_window_config(window, filename):
     create_config_folder()
-    with open(filename, "r") as conf:
-        if not conf:
-            return
-        config_data = json.load(conf)
-        config_data["size"] = window.geometry()
-        config_data["toggle_state"] = window.state()
+    config_data = {}
+    try:
+        with open(filename, "r") as conf:
+            config_data = json.load(conf)
+    except FileNotFoundError:
+        pass
+    
+    config_data["size"] = window.geometry()
+    config_data["toggle_state"] = window.state()
+    
     with open(filename, "w") as conf:
         json.dump(config_data, conf)
 
@@ -49,8 +53,8 @@ def save_config(config_name, config_data):
 
 def get_config_parameter(config_name, key):
     config = get_config(config_name)
-    # check if key exists
-    if key not in config:
+    # check if config is None or key does not exist
+    if config is None or key not in config:
         return None
     return config[key]
 

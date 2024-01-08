@@ -8,6 +8,7 @@ dependencies:
   - conda-forge::black
   - pip:
     - torch
+    - nltk
     - torchvision
     - torchaudio
     - transformers

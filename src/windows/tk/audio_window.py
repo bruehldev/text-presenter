@@ -78,6 +78,8 @@ class AudioWindow(BaseWindow):
     def play_audio(self):
         # play every audio file in the folder
         folder = "audios/sentences"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
         audio_files = os.listdir(folder)
         if len(audio_files) == 0:
             messagebox.showerror("No Audio", "No audio to play!")

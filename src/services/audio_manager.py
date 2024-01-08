@@ -54,6 +54,8 @@ def play_audio_file(file):
 
 def delete_audio_files():
     folder = "audios/sentences"
+    if not os.path.exists(folder):
+        os.makedirs(folder)
     audio_files = os.listdir(folder)
     for filename in audio_files:
         file = os.path.join(folder, filename)
