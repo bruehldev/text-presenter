@@ -21,11 +21,37 @@
     ```
   - Activate:
     ```
-    conda activate textpresentor
+    conda activate textpresenter
     ```
 
-2. Start application
+2. For Windows OS:
+  - Ensure cuda is installed:
+    ```
+    nvcc --version
+    ```
+  - Uninstall the existing torch package: 
+    ```
+    pip uninstall torch
+    ```
+  - Visit the [PyTorch website](https://pytorch.org/get-started/locally/) to get the command for installing the latest version of PyTorch with CUDA support
+    
+    CUDA 11.8:
+    ```
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    ```
+    CUDA 12.1:
+    ```
+    pip3 install torch torchvision torchaudio
+    ```
+
+3. Start application
   - Run:
     ```
     python app.py
     ```
+
+
+
+
+
+
