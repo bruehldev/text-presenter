@@ -17,7 +17,7 @@
 1. Install the required packages by running the following command:
   - Create:
     ```
-    conda env create --name textpresentor --file environment.yml
+    conda env create --name textpresenter --file environment.yml
     ```
   - Activate:
     ```
