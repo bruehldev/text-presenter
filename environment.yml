@@ -6,6 +6,7 @@ dependencies:
   - conda-forge::python=3.10.12
   - conda-forge::numpy
   - conda-forge::black
+  - pip=21.3.1
   - pip:
     - torch
     - nltk
