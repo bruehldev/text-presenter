@@ -31,6 +31,7 @@ class AudioWindow(BaseWindow):
         self.target_word_window = target_word_window
         self.target_word_label = target_word_label
         self.speed = speed
+        self.stop_audio = False
 
         # Dropdown to select the model
         self.model_names = get_model_names()

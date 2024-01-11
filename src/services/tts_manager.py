@@ -10,11 +10,24 @@ def create_folder(folder):
 def generate_tts(sentences, model_name):
     create_folder("audios/sentences")
     for i in range(len(sentences)):
+        if sentences[i] is None:
+            continue
         tts = TTS(
             model_name=model_name,
-            gpu=True,
         )
-        tts.tts_to_file(text=sentences[i], file_path=f"audios/sentences/audio_{i}.wav")
+        tts.to(device="cuda")
+
+        if "multilingual" in model_name:
+            tts.tts_to_file(
+                text=sentences[i],
+                file_path=f"audios/sentences/audio_{i}.wav",
+                language="en",
+            )
+        else:
+            tts.tts_to_file(
+                text=sentences[i],
+                file_path=f"audios/sentences/audio_{i}.wav",
+            )
 
 
 # "tts_models/en/ljspeech/vits"
