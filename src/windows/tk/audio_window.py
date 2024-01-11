@@ -1,10 +1,10 @@
 import os
+import threading
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
 from src.services.audio_manager import (
-    stop_audio,
     play_audio_file,
     delete_audio_files,
     play_audio_file_channel,
@@ -24,6 +24,7 @@ class AudioWindow(BaseWindow):
         speed,
     ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
+        self.audio_thread = None
         self.title = None
         self.sentences = None
         self.target_text_widget = target_text_widget
@@ -58,7 +59,7 @@ class AudioWindow(BaseWindow):
         self.stop_button = tk.Button(
             self.master,
             text="Stop",
-            command=lambda: self.stop_audio(),
+            command=lambda: self.stop_audio_thread(),
         )
         self.stop_button.pack()
 
@@ -75,25 +76,7 @@ class AudioWindow(BaseWindow):
     def save_model_name(self):
         set_config_parameter("audio_window", "model_name", self.selected_model.get())
 
-    def play_audio(self):
-        # play every audio file in the folder
-        folder = "audios/sentences"
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        audio_files = os.listdir(folder)
-        if len(audio_files) == 0:
-            messagebox.showerror("No Audio", "No audio to play!")
-            return
-        audio_files.sort()
-
-        # update rsvp with title
-        self.target_word_label.config(text="Title: " + str(self.title))
-
-        self.target_word_window.update()
-
-        # play title
-        # play_audio_file_channel(f"{folder}/title.wav")
-
+    def _play_audio_files_thread(self, audio_files, folder):
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
 
@@ -128,12 +111,41 @@ class AudioWindow(BaseWindow):
             self.target_text_widget.update()
 
             play_audio_file_channel(file)
+            if self.stop_audio:
+                break
 
         # remove highlight
         self.target_text_widget.tag_remove("highlight", "1.0", "end")
 
-    def stop_audio(self):
-        stop_audio()
+        self.stop_audio = False
+        self.audio_thread = None
+
+    def play_audio(self):
+        # play every audio file in the folder
+        folder = "audios/sentences"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        audio_files = os.listdir(folder)
+        if len(audio_files) == 0:
+            messagebox.showerror("No Audio", "No audio to play!")
+            return
+        audio_files.sort()
+
+        # update rsvp with title
+        self.target_word_label.config(text="Title: " + str(self.title))
+
+        self.target_word_window.update()
+
+        # play title
+        # play_audio_file_channel(f"{folder}/title.wav")
+        self.audio_thread = threading.Thread(
+            target=self._play_audio_files_thread, args=(audio_files, folder)
+        )
+        self.audio_thread.start()
+
+    def stop_audio_thread(self):
+        self.stop_audio = True
+        stop_audio_channel()
 
     def generate_audio(self, sentences, title):
         # delete previous audio files
