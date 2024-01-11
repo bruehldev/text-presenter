@@ -31,18 +31,22 @@ class TextInputWindow(BaseWindow):
 
         # Checkboxes for processing windows
         tk.Checkbutton(
-            self.master, text="Generate Audio", variable=self.audio_processing_var
+            self.master,
+            text="Generate Audio",
+            variable=self.audio_processing_var,
+            command=self.save_checkbox_states,
         ).pack()
         tk.Checkbutton(
             self.master,
             text="Information Retrieval",
             variable=self.information_processing_var,
+            command=self.save_checkbox_states,
         ).pack()
 
         self.send_button = tk.Button(
             self.master,
             text="Apply",
-            command=self.update_text_window,
+            command=self.process_text,
         )
         self.send_button.pack()
 
@@ -64,11 +68,10 @@ class TextInputWindow(BaseWindow):
             self.information_processing_var.get(),
         )
 
-    def update_text_window(self):
-        self.save_checkbox_states()
-        # Check the state of checkboxes before processing
-        self.process_text()
+    def process_text(self):
+        self.update_text_display()
 
+        # Update selected processing steps
         if self.audio_processing_var.get():
             self.audio_window.generate_audio(self.sentences, self.title)
 
@@ -102,7 +105,7 @@ class TextInputWindow(BaseWindow):
             self.information_window.master.update()
             # self.process_information()
 
-    def process_text(self):
+    def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
         # TODO: make any processing window optional. Open/Close windows which are selected
         # delete_audio_files()
