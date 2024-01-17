@@ -6,6 +6,7 @@ from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.rsvp_window import rsvpWindow
 from src.windows.tk.information_window import InformationWindow
 from src.windows.tk.qa_window import QAWindow
+from src.windows.tk.plot_window import PlotWindow
 
 
 class MainWindow(BaseWindow):
@@ -99,13 +100,35 @@ class MainWindow(BaseWindow):
 
         self.audio_window_button.pack()
 
+        # Plot Window
+        # {'you': array([1.9070455, 1.8492087]}
+        self.plot_window = PlotWindow(
+            tk.Toplevel(self.master),
+            {"you": [1.9070455, 1.8492087]},
+            [0],
+        )
+
+        self.plot_window_button = tk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_plot_window_button("Plot Window"),
+        )
+
+        if self.plot_window.master.state() == "normal":
+            self.plot_window_button.config(text=f"Close Plot Window")
+        else:
+            self.plot_window_button.config(text="Open Plot Window")
+
+        self.plot_window_button.pack()
+
         # Text Input Window
         self.text_input_window = TextInputWindow(
             tk.Toplevel(self.master),
             self.text_window,
             self.audio_window,
             self.information_window,
-            self.qa_window
+            self.qa_window,
+            self.plot_window,
         )
         self.text_input_button = tk.Button(
             self.frame,
@@ -226,3 +249,11 @@ class MainWindow(BaseWindow):
         else:
             self.qa_window.master.deiconify()
             self.qa_window_button.config(text=f"Close {name}")
+
+    def toggle_plot_window_button(self, name):
+        if self.plot_window.master.state() == "normal":
+            self.plot_window.master.withdraw()
+            self.plot_window_button.config(text=f"Open {name}")
+        else:
+            self.plot_window.master.deiconify()
+            self.plot_window_button.config(text=f"Close {name}")

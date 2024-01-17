@@ -2,20 +2,29 @@ import tkinter as tk
 from src.windows.tk.base_window import BaseWindow
 import nltk
 from src.services.headline_generator import generate_headline
-from src.services.audio_manager import delete_audio_files
 from src.services.keyphrase_extraction import extract_keyphrases
+from src.services.embeddings_manager import get_words_and_embeddings, get_cluster_labels
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+
 nltk.download("punkt")
 nltk.download("stopwords")
 
 
 class TextInputWindow(BaseWindow):
-    def __init__(self, master, text_window, audio_window, information_window, qa_window):
+    def __init__(
+        self,
+        master,
+        text_window,
+        audio_window,
+        information_window,
+        qa_window,
+        plot_window,
+    ):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.text_input = tk.Text(self.master, state=tk.NORMAL)
         self.text_input.pack()
@@ -23,6 +32,7 @@ class TextInputWindow(BaseWindow):
         self.audio_window = audio_window
         self.information_window = information_window
         self.qa_window = qa_window
+        self.plot_window = plot_window
 
         self.load_checkbox_states()
 
@@ -119,6 +129,12 @@ class TextInputWindow(BaseWindow):
             self.information_window.master.update()
             # self.process_information()
 
+            # update plot window
+            word_and_embeddigs = get_words_and_embeddings(self.text)
+            cluster_labels = get_cluster_labels(word_and_embeddigs)
+            self.plot_window.word_to_embedding = word_and_embeddigs
+            self.plot_window.cluster_labels = cluster_labels
+            self.plot_window.figure = self.plot_window.plot_embeddings(True)
 
     def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
