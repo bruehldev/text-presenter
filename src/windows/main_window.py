@@ -5,6 +5,7 @@ from src.windows.tk.text_window import TextWindow
 from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.rsvp_window import rsvpWindow
 from src.windows.tk.information_window import InformationWindow
+from src.windows.tk.qa_window import QAWindow
 
 
 class MainWindow(BaseWindow):
@@ -25,6 +26,19 @@ class MainWindow(BaseWindow):
         else:
             self.text_window_button.config(text="Open Text Window")
         self.text_window_button.pack()
+
+        # Question Answer Window
+        self.qa_window = QAWindow(tk.Toplevel(self.master))
+        self.qa_window_button = tk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_qa_window_button("Question Answer Window"),
+        )
+        if self.qa_window.master.state() == "normal":
+            self.qa_window_button.config(text=f"Close Question Answer Window")
+        else:
+            self.qa_window_button.config(text="Open Question Answer Window")
+        self.qa_window_button.pack()
 
         # RSVP Window
         self.rsvp_window = rsvpWindow(tk.Toplevel(self.master))
@@ -91,6 +105,7 @@ class MainWindow(BaseWindow):
             self.text_window,
             self.audio_window,
             self.information_window,
+            self.qa_window
         )
         self.text_input_button = tk.Button(
             self.frame,
@@ -203,3 +218,11 @@ class MainWindow(BaseWindow):
         else:
             self.information_window.master.deiconify()
             self.information_window_button.config(text=f"Close {name}")
+
+    def toggle_qa_window_button(self, name):
+        if self.qa_window.master.state() == "normal":
+            self.qa_window.master.withdraw()
+            self.qa_window_button.config(text=f"Open {name}")
+        else:
+            self.qa_window.master.deiconify()
+            self.qa_window_button.config(text=f"Close {name}")

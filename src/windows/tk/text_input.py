@@ -14,13 +14,14 @@ nltk.download("stopwords")
 
 
 class TextInputWindow(BaseWindow):
-    def __init__(self, master, text_window, audio_window, information_window):
+    def __init__(self, master, text_window, audio_window, information_window, qa_window):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.text_input = tk.Text(self.master, state=tk.NORMAL)
         self.text_input.pack()
         self.text_window = text_window
         self.audio_window = audio_window
         self.information_window = information_window
+        self.qa_window = qa_window
 
         self.load_checkbox_states()
 
@@ -104,6 +105,10 @@ class TextInputWindow(BaseWindow):
             self.information_window.on_dropdown_change(None)
             self.information_window.master.update()
             # self.process_information()
+
+            # update question answer window
+            self.qa_window.text = self.text
+            self.qa_window.master.update()
 
     def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
