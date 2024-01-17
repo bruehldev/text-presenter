@@ -13,8 +13,8 @@ class QAWindow(BaseWindow):
         self.answer = ""
         self.question = ""
 
-        self.text_input = tk.Text(self.master, state=tk.NORMAL)
-        self.text_input.pack()
+        self.question_input = tk.Text(self.master, state=tk.NORMAL)
+        self.question_input.pack()
 
         self.send_button = tk.Button(
             self.master,
@@ -24,7 +24,7 @@ class QAWindow(BaseWindow):
         self.send_button.pack()
 
     def process_question(self):
-        self.question = self.text_input.get("1.0", tk.END).strip()
+        self.question = self.question_input.get("1.0", tk.END).strip()
         self.answer = generate_answer(self.question, self.text)
         self.display_answer()
 

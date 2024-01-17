@@ -106,9 +106,6 @@ class TextInputWindow(BaseWindow):
             self.information_window.master.update()
             # self.process_information()
 
-            # update question answer window
-            self.qa_window.text = self.text
-            self.qa_window.master.update()
 
     def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
@@ -121,3 +118,5 @@ class TextInputWindow(BaseWindow):
         self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
         self.text_window.text_widget.config(state=tk.DISABLED)
         self.audio_window.sentences = self.sentences
+        # update question answer window
+        self.qa_window.text = self.text_input.get("1.0", "end-1c")
