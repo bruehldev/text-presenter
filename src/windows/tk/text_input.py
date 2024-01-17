@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 nltk.download("punkt")
 nltk.download("stopwords")
@@ -86,6 +87,18 @@ class TextInputWindow(BaseWindow):
             filtered_words = [word for word in filtered_words if word.isalpha()]
             text_without_stopwords = " ".join(filtered_words)
             text_without_stopwords_tokens = word_tokenize(text_without_stopwords)
+
+            # TF-IDF
+            tfidf_vectorizer = TfidfVectorizer()
+            tfidf_matrix = tfidf_vectorizer.fit_transform([text_without_stopwords])
+            feature_names = tfidf_vectorizer.get_feature_names_out()
+            tfidf_scores = tfidf_matrix.toarray()[0]
+            features_and_scores = list(zip(feature_names, tfidf_scores))
+            sorted_features = sorted(
+                features_and_scores, key=lambda x: x[1], reverse=True
+            )
+            print(sorted_features)
+
             freq_dist_without_stopwords = FreqDist(text_without_stopwords_tokens)
             self.information_window.frequent_words = (
                 freq_dist_without_stopwords.most_common()
