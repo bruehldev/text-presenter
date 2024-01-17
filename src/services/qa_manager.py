@@ -12,4 +12,4 @@ def generate_answer(question, text):
 
     res = nlp(QA_input)
 
-    return res
+    return res["answer"]
