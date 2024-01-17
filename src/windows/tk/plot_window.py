@@ -3,6 +3,7 @@ from tkinter import ttk
 from src.windows.tk.base_window import BaseWindow
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 
 
 class PlotWindow(BaseWindow):
@@ -18,6 +19,11 @@ class PlotWindow(BaseWindow):
             self.figure.clf()
             plt.close(self.figure)
             self.canvas.get_tk_widget().destroy()
+            self.canvas = None
+            # delete old navigation toolbar
+            for child in self.master.winfo_children():
+                if isinstance(child, NavigationToolbar2Tk):
+                    child.destroy()
 
         figure = plt.figure()
         if len(self.word_to_embedding) == 0:
@@ -34,6 +40,11 @@ class PlotWindow(BaseWindow):
 
         self.figure = figure
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.master)
+
+        # Add navigation toolbar
+        toolbar = NavigationToolbar2Tk(self.canvas, self.master)
+        toolbar.update()
+
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()
 

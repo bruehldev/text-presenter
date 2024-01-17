@@ -130,7 +130,7 @@ class TextInputWindow(BaseWindow):
             # self.process_information()
 
             # update plot window
-            word_and_embeddigs = get_words_and_embeddings(self.text)
+            word_and_embeddigs = get_words_and_embeddings(text_without_stopwords)
             cluster_labels = get_cluster_labels(word_and_embeddigs)
             self.plot_window.word_to_embedding = word_and_embeddigs
             self.plot_window.cluster_labels = cluster_labels
