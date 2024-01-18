@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import ttk, Toplevel, DoubleVar, BOTTOM, W, S
 from src.windows.tk.base_window import BaseWindow
 from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
@@ -12,12 +12,16 @@ from src.windows.tk.plot_window import PlotWindow
 class MainWindow(BaseWindow):
     def __init__(self, master):
         super().__init__(master, "Options", "config/root.conf")
+        # Set the background color of the window
+        bg_color = self.master.winfo_toplevel().cget("bg")
+        self.master.configure(bg=bg_color)
 
-        self.frame.pack()
-
+        # Set the background color of the frame
+        self.frame = ttk.Frame(master)
+        self.frame.pack(fill="both", expand=True)
         # Text Window
-        self.text_window = TextWindow(tk.Toplevel(self.master))
-        self.text_window_button = tk.Button(
+        self.text_window = TextWindow(Toplevel(self.master))
+        self.text_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_text_window_button("Text Window"),
@@ -29,8 +33,8 @@ class MainWindow(BaseWindow):
         self.text_window_button.pack()
 
         # Question Answer Window
-        self.qa_window = QAWindow(tk.Toplevel(self.master))
-        self.qa_window_button = tk.Button(
+        self.qa_window = QAWindow(Toplevel(self.master))
+        self.qa_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_qa_window_button("Question Answer Window"),
@@ -42,8 +46,8 @@ class MainWindow(BaseWindow):
         self.qa_window_button.pack()
 
         # RSVP Window
-        self.rsvp_window = rsvpWindow(tk.Toplevel(self.master))
-        self.rsvp_window_button = tk.Button(
+        self.rsvp_window = rsvpWindow(Toplevel(self.master))
+        self.rsvp_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_rsvp_window_button("RSVP Window"),
@@ -55,8 +59,8 @@ class MainWindow(BaseWindow):
         self.rsvp_window_button.pack()
 
         # Information Window
-        self.information_window = InformationWindow(tk.Toplevel(self.master))
-        self.information_window_button = tk.Button(
+        self.information_window = InformationWindow(Toplevel(self.master))
+        self.information_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_information_window_button("Information Window"),
@@ -68,8 +72,8 @@ class MainWindow(BaseWindow):
         self.information_window_button.pack()
 
         # Speed control slider
-        self.speed_var = tk.DoubleVar()
-        self.speed_slider = tk.Scale(
+        self.speed_var = DoubleVar()
+        self.speed_slider = ttk.Scale(
             self.frame,
             from_=0.1,
             to=2.0,
@@ -82,13 +86,13 @@ class MainWindow(BaseWindow):
 
         # Audio Window
         self.audio_window = AudioWindow(
-            tk.Toplevel(self.master),
+            Toplevel(self.master),
             self.text_window.text_widget,
             self.rsvp_window.master,
             self.rsvp_window.word_label,
             self.speed_var.get(),
         )
-        self.audio_window_button = tk.Button(
+        self.audio_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_audio_window_button("Audio Window"),
@@ -103,12 +107,12 @@ class MainWindow(BaseWindow):
         # Plot Window
         # {'you': array([1.9070455, 1.8492087]}
         self.plot_window = PlotWindow(
-            tk.Toplevel(self.master),
+            Toplevel(self.master),
             {"you": [1.9070455, 1.8492087]},
             [0],
         )
 
-        self.plot_window_button = tk.Button(
+        self.plot_window_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_plot_window_button("Plot Window"),
@@ -123,14 +127,14 @@ class MainWindow(BaseWindow):
 
         # Text Input Window
         self.text_input_window = TextInputWindow(
-            tk.Toplevel(self.master),
+            Toplevel(self.master),
             self.text_window,
             self.audio_window,
             self.information_window,
             self.qa_window,
             self.plot_window,
         )
-        self.text_input_button = tk.Button(
+        self.text_input_button = ttk.Button(
             self.frame,
             text="",
             command=lambda: self.toggle_text_input_window_button("Text Input"),
@@ -142,7 +146,7 @@ class MainWindow(BaseWindow):
         self.text_input_button.pack()
 
         # Start display words button
-        self.start_button = tk.Button(
+        self.start_button = ttk.Button(
             self.frame,
             text="Start",
             command=lambda: self.display_words(
@@ -156,8 +160,8 @@ class MainWindow(BaseWindow):
         self.start_button.pack()
 
         # Place Speed label, Speed slider, and Start button at the bottom
-        self.speed_slider.pack(side=tk.BOTTOM, anchor=tk.W)
-        self.start_button.pack(side=tk.BOTTOM, anchor=tk.S)
+        self.speed_slider.pack(side=BOTTOM, anchor=W)
+        self.start_button.pack(side=BOTTOM, anchor=S)
 
     def display_words(
         self, speed, words, target_text_widget, target_word_label, target_word_window
