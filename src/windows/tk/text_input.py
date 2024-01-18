@@ -48,6 +48,7 @@ class TextInputWindow(BaseWindow):
 
         self.audio_processing_var = IntVar(value=self.audio_checkbox_state)
         self.information_processing_var = IntVar(value=self.information_checkbox_state)
+        self.topic_clustering_var = IntVar(value=self.information_checkbox_state)
 
         # Checkboxes for processing windows
         ttk.Checkbutton(
@@ -60,6 +61,12 @@ class TextInputWindow(BaseWindow):
             self.frame,
             text="Information Retrieval",
             variable=self.information_processing_var,
+            command=self.save_checkbox_states,
+        ).pack()
+        topic_clustering_checkbox = ttk.Checkbutton(
+            self.frame,
+            text="Topic Clustering",
+            variable=self.topic_clustering_var,
             command=self.save_checkbox_states,
         ).pack()
 
@@ -77,6 +84,13 @@ class TextInputWindow(BaseWindow):
         self.information_checkbox_state = get_config_parameter(
             "text_input", "information_processing"
         )
+        # set topic clustering checkbox to 1 if information processing is 1
+        if self.information_checkbox_state == 0:
+            self.topic_clustering_checkbox_state = 0
+
+            self.topic_clustering_checkbox_state = get_config_parameter(
+                "text_input", "topic_clustering"
+            )
 
     def save_checkbox_states(self):
         set_config_parameter(
@@ -87,6 +101,11 @@ class TextInputWindow(BaseWindow):
             "information_processing",
             self.information_processing_var.get(),
         )
+        # if information processing is 1, set topic clustering to 1
+        if self.information_processing_var.get() == 0:
+            set_config_parameter("text_input", "topic_clustering", 0)
+            # update checkbox
+            self.topic_clustering_var.set(0)
 
     def process_text(self):
         self.update_text_display()
@@ -136,7 +155,7 @@ class TextInputWindow(BaseWindow):
             self.information_window.on_dropdown_change(None)
             self.information_window.master.update()
             # self.process_information()
-
+        if self.topic_clustering_var.get():
             # update plot window
             word_and_embeddigs = get_words_and_embeddings(text_without_stopwords)
             cluster_labels = get_cluster_labels(word_and_embeddigs)
