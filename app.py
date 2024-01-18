@@ -2,28 +2,41 @@ from ttkthemes import ThemedTk
 from src.windows.main_window import MainWindow
 
 """ Themes:
-arc
-black
-blue
-clearlooks
-equilux
-keramik
 plastik
-radiance
-scidblue
-scidgreen
-scidgrey
 scidmint
+scidblue
 scidpink
-scidsand
-smog
+blue
+alt
+aquativo
+scidgreen
+breeze
+adapta
+clearlooks
+scidpurple
 winxpblue
+radiance
+scidsand
+ubuntu
+equilux
+default
+keramik
+elegance
+clam
+smog
+kroc
+itft1
+classic
 yaru
+scidgrey
+black
+arc
+
 """
 
 
 def main():
-    root = ThemedTk(theme="black")
+    root = ThemedTk(theme="equilux")
     main = MainWindow(root)
     root.mainloop()
 
