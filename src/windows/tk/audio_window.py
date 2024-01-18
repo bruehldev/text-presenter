@@ -160,7 +160,7 @@ class AudioWindow(BaseWindow):
 
             self.target_text_widget.tag_add("highlight", pointer_start, pointer_end)
 
-            self.target_text_widget.tag_config("highlight", background="yellow")
+            self.target_text_widget.tag_config("highlight", background="#646e6d")
 
             # unmark previous sentence
             if index > 0:
