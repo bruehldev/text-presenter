@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import ttk
 from src.windows.tk.base_window import BaseWindow
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -9,6 +8,9 @@ from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 class PlotWindow(BaseWindow):
     def __init__(self, master, word_to_embedding, cluster_labels):
         super().__init__(master, "Plot", "config/plot.conf")
+        self.frame = ttk.Frame(self.master)
+        self.frame.pack(fill="both", expand=True)
+
         self.word_to_embedding = word_to_embedding
         self.cluster_labels = cluster_labels
         self.figure = self.plot_embeddings(False)
@@ -21,7 +23,7 @@ class PlotWindow(BaseWindow):
             self.canvas.get_tk_widget().destroy()
             self.canvas = None
             # delete old navigation toolbar
-            for child in self.master.winfo_children():
+            for child in self.frame.winfo_children():
                 if isinstance(child, NavigationToolbar2Tk):
                     child.destroy()
 
@@ -39,10 +41,10 @@ class PlotWindow(BaseWindow):
             plt.annotate(word, list(self.word_to_embedding.values())[i])
 
         self.figure = figure
-        self.canvas = FigureCanvasTkAgg(self.figure, master=self.master)
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self.frame)
 
         # Add navigation toolbar
-        toolbar = NavigationToolbar2Tk(self.canvas, self.master)
+        toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
         toolbar.update()
 
         self.canvas.draw()
