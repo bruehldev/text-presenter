@@ -1,7 +1,6 @@
 import os
 import threading
-import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, StringVar
 from tkinter import messagebox
 from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
 from src.services.audio_manager import (
@@ -24,6 +23,8 @@ class AudioWindow(BaseWindow):
         speed,
     ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
+        self.frame = ttk.Frame(self.master)
+        self.frame.pack(fill="both", expand=True)
         self.audio_thread = None
         self.title = None
         self.sentences = None
@@ -35,10 +36,10 @@ class AudioWindow(BaseWindow):
 
         # Dropdown to select the model
         self.model_names = get_model_names()
-        self.selected_model = tk.StringVar()
+        self.selected_model = StringVar()
         self.load_model_name()
         self.model_dropdown = ttk.Combobox(
-            self.master,
+            self.frame,
             textvariable=self.selected_model,
             values=self.model_names,
             state="readonly",
@@ -50,22 +51,22 @@ class AudioWindow(BaseWindow):
             "<<ComboboxSelected>>", lambda event: self.save_model_name()
         )
 
-        self.play_button = tk.Button(
-            self.master,
+        self.play_button = ttk.Button(
+            self.frame,
             text="Play",
             command=lambda: self.play_audio(),
         )
         self.play_button.pack()
 
-        self.stop_button = tk.Button(
-            self.master,
+        self.stop_button = ttk.Button(
+            self.frame,
             text="Stop",
             command=lambda: self.stop_audio_thread(),
         )
         self.stop_button.pack()
 
-        self.process_button = tk.Button(
-            self.master,
+        self.process_button = ttk.Button(
+            self.frame,
             text="Process",
             command=lambda: self.generate_audio(self.sentences, self.title),
         )

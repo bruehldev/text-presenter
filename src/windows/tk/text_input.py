@@ -31,7 +31,7 @@ class TextInputWindow(BaseWindow):
         self.frame.pack(fill="both", expand=True)
         bg_color = self.master.winfo_toplevel().cget("bg")
         self.text_input = Text(
-            self.master,
+            self.frame,
             state=NORMAL,
             background=bg_color,
             foreground="black",
