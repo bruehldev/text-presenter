@@ -9,6 +9,7 @@ from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
 from sklearn.feature_extraction.text import TfidfVectorizer
+from tkinter import messagebox
 
 
 nltk.download("punkt")
@@ -135,6 +136,8 @@ class TextInputWindow(BaseWindow):
             self.plot_window.word_to_embedding = word_and_embeddigs
             self.plot_window.cluster_labels = cluster_labels
             self.plot_window.figure = self.plot_window.plot_embeddings(True)
+
+        messagebox.showinfo("Done", "Text processed!")
 
     def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
