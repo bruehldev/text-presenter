@@ -83,8 +83,7 @@ class MainWindow(BaseWindow):
         self.audio_window = AudioWindow(
             Toplevel(self.master),
             self.text_window.text_widget,
-            self.rsvp_window.master,
-            self.rsvp_window.word_label,
+            self.rsvp_window,
             self.speed_var.get(),
         )
         self.audio_window_button = ttk.Button(

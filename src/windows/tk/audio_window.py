@@ -1,6 +1,6 @@
 import os
 import threading
-from tkinter import ttk, StringVar
+from tkinter import ttk, StringVar, BOTTOM
 from tkinter import messagebox
 from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
 from src.services.audio_manager import (
@@ -18,8 +18,7 @@ class AudioWindow(BaseWindow):
         self,
         master,
         target_text_widget,
-        target_word_window,
-        target_word_label,
+        target_rsvp_window,
         speed,
     ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
@@ -29,8 +28,7 @@ class AudioWindow(BaseWindow):
         self.title = None
         self.sentences = None
         self.target_text_widget = target_text_widget
-        self.target_word_window = target_word_window
-        self.target_word_label = target_word_label
+        self.target_rsvp_window = target_rsvp_window
         self.speed = speed
         self.stop_audio = False
 
@@ -72,6 +70,68 @@ class AudioWindow(BaseWindow):
         )
         self.process_button.pack()
 
+        # Label to display font size
+        self.font_size_label = ttk.Label(
+            self.frame, text=f"Text Size: {self.target_rsvp_window.font_size}"
+        )
+        self.font_size_label.pack(side=BOTTOM)
+
+        # Label to display wraplength
+        self.wraplength_label = ttk.Label(
+            self.frame, text=f"Wraplength: {self.target_rsvp_window.wraplength}"
+        )
+        self.wraplength_label.pack(side=BOTTOM)
+
+        # Button to decrease text size
+        self.decrease_text_size_button = ttk.Button(
+            self.frame, text="Decrease Text Size", command=self.decrease_text_size
+        )
+        self.decrease_text_size_button.pack(side=BOTTOM)
+
+        # Button to increase text size
+        self.increase_text_size_button = ttk.Button(
+            self.frame, text="Increase Text Size", command=self.increase_text_size
+        )
+        self.increase_text_size_button.pack(side=BOTTOM)
+
+        # Button to decrease wraplength
+        self.decrease_wraplength_button = ttk.Button(
+            self.frame, text="Decrease Wraplength", command=self.decrease_wraplength
+        )
+        self.decrease_wraplength_button.pack(side=BOTTOM)
+
+        # Button to increase wraplength
+        self.increase_wraplength_button = ttk.Button(
+            self.frame, text="Increase Wraplength", command=self.increase_wraplength
+        )
+        self.increase_wraplength_button.pack(side=BOTTOM)
+
+    def update_font_size_label(self):
+        self.font_size_label.config(
+            text=f"Text Size: {self.target_rsvp_window.font_size}"
+        )
+
+    def increase_text_size(self):
+        self.target_rsvp_window.increase_text_size()
+        self.update_font_size_label()
+
+    def decrease_text_size(self):
+        self.target_rsvp_window.decrease_text_size()
+        self.update_font_size_label()
+
+    def update_wraplength_label(self):
+        self.wraplength_label.config(
+            text=f"Wraplength: {self.target_rsvp_window.wraplength}"
+        )
+
+    def increase_wraplength(self):
+        self.target_rsvp_window.increase_wraplength()
+        self.update_wraplength_label()
+
+    def decrease_wraplength(self):
+        self.target_rsvp_window.decrease_wraplength()
+        self.update_wraplength_label()
+
     def load_model_name(self):
         self.selected_model.set(get_config_parameter("audio_window", "model_name"))
 
@@ -86,8 +146,8 @@ class AudioWindow(BaseWindow):
                 messagebox.showerror("No Text", "No text to process!")
                 return
             # update rsvp with sentence
-            self.target_word_label.config(text=self.sentences[index])
-            self.target_word_window.update()
+            self.target_rsvp_window.word_label.config(text=self.sentences[index])
+            self.target_rsvp_window.master.update()
 
             # update text widget with highlighted sentence
             pointer_start = "1.0"
@@ -134,9 +194,9 @@ class AudioWindow(BaseWindow):
         audio_files.sort()
 
         # update rsvp with title
-        self.target_word_label.config(text="Title: " + str(self.title))
+        self.target_rsvp_window.word_label.config(text="Title: " + str(self.title))
 
-        self.target_word_window.update()
+        self.target_rsvp_window.master.update()
 
         # play title
         # play_audio_file_channel(f"{folder}/title.wav")
