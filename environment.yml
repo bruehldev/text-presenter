@@ -18,3 +18,4 @@ dependencies:
     - pygame
     - pydub
     - hdbscan
+    - ttkthemes
