@@ -16,17 +16,17 @@ def generate_tts(sentences, model_name):
             model_name=model_name,
         )
         tts.to(device="cuda")
-
+        padded_index = str(i).zfill(5)
         if "multilingual" in model_name:
             tts.tts_to_file(
                 text=sentences[i],
-                file_path=f"audios/sentences/audio_{i}.wav",
+                file_path=f"audios/sentences/audio_{padded_index}.wav",
                 language="en",
             )
         else:
             tts.tts_to_file(
                 text=sentences[i],
-                file_path=f"audios/sentences/audio_{i}.wav",
+                file_path=f"audios/sentences/audio_{padded_index}.wav",
             )
 
 

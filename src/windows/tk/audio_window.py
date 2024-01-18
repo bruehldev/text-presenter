@@ -156,5 +156,5 @@ class AudioWindow(BaseWindow):
             messagebox.showerror("No Text", "No text to process!")
             return
         generate_tts(sentences, self.selected_model.get())
-        generate_tts_title(title, self.selected_model.get())
+        # generate_tts_title(title, self.selected_model.get())
         messagebox.showinfo("TTS Generated", "TTS audio generated successfully!")
