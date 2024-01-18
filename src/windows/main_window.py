@@ -12,12 +12,7 @@ from src.windows.tk.plot_window import PlotWindow
 class MainWindow(BaseWindow):
     def __init__(self, master):
         super().__init__(master, "Options", "config/root.conf")
-        # Set the background color of the window
-        bg_color = self.master.winfo_toplevel().cget("bg")
-        self.master.configure(bg=bg_color)
-
-        # Set the background color of the frame
-        self.frame = ttk.Frame(master)
+        self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         # Text Window
         self.text_window = TextWindow(Toplevel(self.master))

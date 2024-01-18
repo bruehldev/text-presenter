@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import ttk, NORMAL, DISABLED, IntVar, NORMAL, Text
 from src.windows.tk.base_window import BaseWindow
 import nltk
 from src.services.headline_generator import generate_headline
@@ -27,8 +27,17 @@ class TextInputWindow(BaseWindow):
         plot_window,
     ):
         super().__init__(master, "Text Input", "config/text_input.conf")
-        self.text_input = tk.Text(self.master, state=tk.NORMAL)
-        self.text_input.pack()
+        self.frame = ttk.Frame(self.master)
+        self.frame.pack(fill="both", expand=True)
+        bg_color = self.master.winfo_toplevel().cget("bg")
+        self.text_input = Text(
+            self.master,
+            state=NORMAL,
+            background=bg_color,
+            foreground="black",
+            wrap="word",
+        )
+        self.text_input.pack(fill="both", expand=True)
         self.text_window = text_window
         self.audio_window = audio_window
         self.information_window = information_window
@@ -37,27 +46,25 @@ class TextInputWindow(BaseWindow):
 
         self.load_checkbox_states()
 
-        self.audio_processing_var = tk.IntVar(value=self.audio_checkbox_state)
-        self.information_processing_var = tk.IntVar(
-            value=self.information_checkbox_state
-        )
+        self.audio_processing_var = IntVar(value=self.audio_checkbox_state)
+        self.information_processing_var = IntVar(value=self.information_checkbox_state)
 
         # Checkboxes for processing windows
-        tk.Checkbutton(
-            self.master,
+        ttk.Checkbutton(
+            self.frame,
             text="Generate Audio",
             variable=self.audio_processing_var,
             command=self.save_checkbox_states,
         ).pack()
-        tk.Checkbutton(
-            self.master,
+        ttk.Checkbutton(
+            self.frame,
             text="Information Retrieval",
             variable=self.information_processing_var,
             command=self.save_checkbox_states,
         ).pack()
 
-        self.send_button = tk.Button(
-            self.master,
+        self.send_button = ttk.Button(
+            self.frame,
             text="Apply",
             command=self.process_text,
         )
@@ -145,10 +152,10 @@ class TextInputWindow(BaseWindow):
         # delete_audio_files()
         self.text = self.text_input.get("1.0", "end-1c")
         self.sentences = nltk.sent_tokenize(self.text)
-        self.text_window.text_widget.config(state=tk.NORMAL)
+        self.text_window.text_widget.config(state=NORMAL)
         self.text_window.text_widget.delete("1.0", "end")
         self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
-        self.text_window.text_widget.config(state=tk.DISABLED)
+        self.text_window.text_widget.config(state=DISABLED)
         self.audio_window.sentences = self.sentences
         # update question answer window
         self.qa_window.text = self.text_input.get("1.0", "end-1c")

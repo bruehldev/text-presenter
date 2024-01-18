@@ -1,12 +1,10 @@
-import tkinter as tk
+import tkinter as ttk
 from src.services.config_manager import load_window_config, save_window_config
 
 
 class BaseWindow:
     def __init__(self, master, title, config_filename):
         self.master = master
-        self.frame = tk.Frame(self.master)
-
         self.title = title
         self.config_filename = config_filename
 
