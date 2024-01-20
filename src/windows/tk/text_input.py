@@ -162,30 +162,10 @@ class TextInputWindow(BaseWindow):
             # extract and set keyphrases
             self.keyphrases = extract_keyphrases(self.text)
             self.information_window.keyphrases = self.keyphrases
+            self.text_window.keyphrases = self.keyphrases
+            self.rsvp_window.keyphrases = self.keyphrases
 
-            if self.keyphrases is not None:
-                self.rsvp_window.keyphrases = self.keyphrases
-                # configure the "underline" tag
-                self.text_window.text_widget.tag_config("underline", underline=True)
-
-                # underline keyphrases in text widget
-                # underline keyphrases in text widget
-                for keyphrase in self.keyphrases:
-                    start_idx = "1.0"
-                    while True:
-                        start_idx = self.text_window.text_widget.search(
-                            r"\y" + keyphrase + r"\y",
-                            start_idx,
-                            stopindex=END,
-                            regexp=True,
-                        )
-                        if not start_idx:
-                            break
-                        end_idx = f"{start_idx}+{len(keyphrase)}c"
-                        self.text_window.text_widget.tag_add(
-                            "underline", start_idx, end_idx
-                        )
-                        start_idx = end_idx
+            self.text_window.underline_keyphrases()
 
             # generate and set headline
             headline = generate_headline(self.text)
@@ -298,10 +278,7 @@ class TextInputWindow(BaseWindow):
         # delete_audio_files()
         self.text = self.text_input.get("1.0", "end-1c")
         self.sentences = nltk.sent_tokenize(self.text)
-        self.text_window.text_widget.config(state=NORMAL)
-        self.text_window.text_widget.delete("1.0", "end")
-        self.text_window.text_widget.insert("1.0", self.text)
-        self.text_window.text_widget.config(state=DISABLED)
+        self.text_window.update_text_display(self.text)
         self.audio_window.sentences = self.sentences
         # update question answer window
         self.qa_window.text = self.text

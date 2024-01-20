@@ -12,7 +12,7 @@ from src.services.config_manager import get_config_parameter, set_config_paramet
 
 
 class rsvpWindow(BaseWindow):
-    def __init__(self, master):
+    def __init__(self, master, color_dict):
         super().__init__(master, "rsvp Window", "config/rsvp_window.conf")
         # Frame to hold the label with a border
         self.frame = ttk.Frame(self.master, padding=10, border=1)

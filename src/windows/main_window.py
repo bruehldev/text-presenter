@@ -37,7 +37,7 @@ class MainWindow(BaseWindow):
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         # Text Window
-        self.text_window = TextWindow(Toplevel(self.master))
+        self.text_window = TextWindow(Toplevel(self.master), color_dict)
         self.text_window_button = ttk.Button(
             self.frame,
             text="",
@@ -63,7 +63,7 @@ class MainWindow(BaseWindow):
         self.qa_window_button.pack()
 
         # RSVP Window
-        self.rsvp_window = rsvpWindow(Toplevel(self.master))
+        self.rsvp_window = rsvpWindow(Toplevel(self.master), color_dict)
         self.rsvp_window_button = ttk.Button(
             self.frame,
             text="",
