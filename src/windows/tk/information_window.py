@@ -13,7 +13,13 @@ class InformationWindow(BaseWindow):
         self.dropdown = ttk.Combobox(
             self.frame,
             textvariable=self.dropdown_var,
-            values=["Keyphrases", "Listbox2", "Frequent Words", "Bulletpoints"],
+            values=[
+                "Keyphrases",
+                "Listbox2",
+                "Frequent Words",
+                "Bulletpoints",
+                "Topics",
+            ],
         )
         self.dropdown.pack()
 
@@ -38,6 +44,12 @@ class InformationWindow(BaseWindow):
         self.bulletpoints_listbox.configure(bg="black", fg="white")
         self.bulletpoints_listbox.pack(fill="both", expand=True)
 
+        # Topics
+        self.topics = None
+        self.topics_listbox = Listbox(self.frame)
+        self.topics_listbox.configure(bg="black", fg="white")
+        self.topics_listbox.pack(fill="both", expand=True)
+
         # TODO REMOVE THIS
         # Additional listbox for Listbox2
         self.listbox2 = Listbox(self.frame)
@@ -54,6 +66,7 @@ class InformationWindow(BaseWindow):
         self.frequent_words_listbox.pack_forget()
         self.listbox2.pack_forget()
         self.bulletpoints_listbox.pack_forget()
+        self.topics_listbox.pack_forget()
 
         if selected_value == "Keyphrases":
             self.keyphrases_listbox.delete(0, END)
@@ -88,10 +101,18 @@ class InformationWindow(BaseWindow):
             for bulletpoint in self.bulletpoints:
                 self.bulletpoints_listbox.insert(END, bulletpoint)
             self.bulletpoints_listbox.pack(fill="both", expand=True)
+        elif selected_value == "Topics":
+            self.topics_listbox.delete(0, END)
+            if self.topics is None:
+                return
+            for topic in self.topics:
+                self.topics_listbox.insert(END, topic)
+            self.topics_listbox.pack(fill="both", expand=True)
 
     def reset(self):
         self.keyphrases_listbox.delete(0, END)
         self.frequent_words_listbox.delete(0, END)
         self.bulletpoints_listbox.delete(0, END)
         self.listbox2.delete(0, END)
+        self.topics_listbox.delete(0, END)
         self.dropdown_var.set("Keyphrases")

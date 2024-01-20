@@ -299,6 +299,11 @@ class TextInputWindow(BaseWindow):
             print("cluster_name_mappings")
             print(cluster_name_mappings)
 
+            # add topics from cluster names to information window except outliers
+            self.information_window.topics = [
+                topic for topic in cluster_name_mappings.values() if topic != "Outliers"
+            ]
+
             # print each word in word_and_embeddigs
             # for word in words_and_embeddings.keys():
             # print(word)
