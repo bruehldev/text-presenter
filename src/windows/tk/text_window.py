@@ -9,7 +9,8 @@ class TextWindow(BaseWindow):
         self.frame.pack(fill="both", expand=True)
         self.keyphrases = []
         self.text = ""
-
+        self.color_dict = color_dict
+        self.sentence_structure = None
         # headline
         self.headline = ttk.Label(self.frame, text="Generated Headline")
         self.headline.pack()
@@ -45,4 +46,32 @@ class TextWindow(BaseWindow):
                         break
                     end_idx = f"{start_idx}+{len(keyphrase)}c"
                     self.text_widget.tag_add("underline", start_idx, end_idx)
+                    start_idx = end_idx
+
+    # Highlight the words in sentence_structure according to their cluster and their color_dict
+    def highlight_words(self):
+        if self.sentence_structure is None:
+            return
+        for sentence in self.sentence_structure.values():
+            words = sentence["words"]
+            cluster_labels = sentence["cluster_labels"]
+            for word, cluster_label in zip(words, cluster_labels):
+                if cluster_label == -1:
+                    continue
+                self.text_widget.tag_config(
+                    cluster_label,
+                    background=self.color_dict[cluster_label],
+                )
+                start_idx = "1.0"
+                while True:
+                    start_idx = self.text_widget.search(
+                        r"\y" + word + r"\y",
+                        start_idx,
+                        stopindex=END,
+                        regexp=True,
+                    )
+                    if not start_idx:
+                        break
+                    end_idx = f"{start_idx}+{len(word)}c"
+                    self.text_widget.tag_add(cluster_label, start_idx, end_idx)
                     start_idx = end_idx

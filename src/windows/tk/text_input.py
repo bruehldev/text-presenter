@@ -267,6 +267,9 @@ class TextInputWindow(BaseWindow):
             self.plot_window.word_to_embedding = words_and_embeddings
             self.plot_window.cluster_labels = cluster_labels
             self.plot_window.sentence_structure = self.sentence_structure
+            self.text_window.sentence_structure = self.sentence_structure
+            self.rsvp_window.sentence_structure = self.sentence_structure
+            self.text_window.highlight_words()
             self.plot_window.cluster_name_mappings = cluster_name_mappings
             self.plot_window.figure = self.plot_window.plot_embeddings(True)
 

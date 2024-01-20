@@ -20,6 +20,8 @@ class rsvpWindow(BaseWindow):
 
         self.keyphrases = ["sentence", "testing", "wraplength"]
         self.text = "A sentence example for testing wraplength; it's quite lengthy, demonstrating how the feature adjusts text in the Tkinter window."
+        self.color_dict = color_dict
+        self.sentence_structure = None
 
         # Initial wraplength
         self.wraplength = 300
@@ -35,6 +37,7 @@ class rsvpWindow(BaseWindow):
         self.word_text.configure(bg="black", fg="white")
 
         self.update_text_display(self.text)
+        self.underline_keyphrases()
         self.load_wraplength()
         self.load_font_size()
         self.word_text.pack(fill=BOTH, expand=True)
@@ -43,25 +46,56 @@ class rsvpWindow(BaseWindow):
         self.word_text.config(state=NORMAL)
         self.word_text.delete("1.0", END)
         self.word_text.insert(END, text)
-        # underline keyphrases
-        for keyphrase in self.keyphrases:
-            start_idx = "1.0"
-            while True:
-                start_idx = self.word_text.search(
-                    r"\y" + keyphrase + r"\y",
-                    start_idx,
-                    stopindex=END,
-                    regexp=True,
+
+    def underline_keyphrases(self):
+        if self.keyphrases is not None:
+            # configure the "underline" tag
+            self.word_text.tag_config("underline", underline=True)
+
+            # underline keyphrases in text widget
+            for keyphrase in self.keyphrases:
+                start_idx = "1.0"
+                while True:
+                    start_idx = self.word_text.search(
+                        r"\y" + keyphrase + r"\y",
+                        start_idx,
+                        stopindex=END,
+                        regexp=True,
+                    )
+                    if not start_idx:
+                        break
+                    end_idx = f"{start_idx}+{len(keyphrase)}c"
+                    self.word_text.tag_add("underline", start_idx, end_idx)
+                    start_idx = end_idx
+
+    def highlight_words(self):
+        print("highlight_words")
+        print(self.sentence_structure)
+        if self.sentence_structure is None:
+            return
+        for sentence in self.sentence_structure.values():
+            words = sentence["words"]
+            cluster_labels = sentence["cluster_labels"]
+            for word, cluster_label in zip(words, cluster_labels):
+                if cluster_label == -1:
+                    continue
+                self.word_text.tag_config(
+                    cluster_label,
+                    background=self.color_dict[cluster_label],
                 )
-                if not start_idx:
-                    break
-                end_idx = f"{start_idx}+{len(keyphrase)}c"
-                self.word_text.tag_add("underline", start_idx, end_idx)
-                start_idx = end_idx
-
-        self.word_text.tag_config("underline", foreground="white", underline=True)
-
-        self.word_text.config(state=DISABLED)
+                start_idx = "1.0"
+                while True:
+                    start_idx = self.word_text.search(
+                        r"\y" + word + r"\y",
+                        start_idx,
+                        stopindex=END,
+                        regexp=True,
+                    )
+                    if not start_idx:
+                        break
+                    end_idx = f"{start_idx}+{len(word)}c"
+                    self.word_text.tag_add(cluster_label, start_idx, end_idx)
+                    start_idx = end_idx
 
     def increase_wraplength(self):
         self.wraplength += 50

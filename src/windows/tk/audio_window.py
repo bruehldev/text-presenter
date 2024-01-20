@@ -150,6 +150,8 @@ class AudioWindow(BaseWindow):
             # update rsvp
             sentence = self.sentences[index]
             self.target_rsvp_window.update_text_display(sentence)
+            self.target_rsvp_window.underline_keyphrases()
+            self.target_rsvp_window.highlight_words()
 
             # update text widget with highlighted sentence
             pointer_start = "1.0"
