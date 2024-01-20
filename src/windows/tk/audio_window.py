@@ -19,7 +19,7 @@ class AudioWindow(BaseWindow):
         master,
         target_text_widget,
         target_rsvp_window,
-        speed,
+        target_plot_window,
     ):
         super().__init__(master, "Audio Window", "config/audio_window.conf")
         self.frame = ttk.Frame(self.master)
@@ -29,7 +29,7 @@ class AudioWindow(BaseWindow):
         self.sentences = None
         self.target_text_widget = target_text_widget
         self.target_rsvp_window = target_rsvp_window
-        self.speed = speed
+        self.target_plot_window = target_plot_window
         self.stop_audio = False
 
         # Dropdown to select the model
@@ -139,6 +139,8 @@ class AudioWindow(BaseWindow):
         set_config_parameter("audio_window", "model_name", self.selected_model.get())
 
     def _play_audio_files_thread(self, audio_files, folder):
+        # only use sentences_structure
+
         for index, filename in enumerate(audio_files):
             file = os.path.join(folder, filename)
 
@@ -161,6 +163,11 @@ class AudioWindow(BaseWindow):
             self.target_text_widget.tag_add("highlight", pointer_start, pointer_end)
 
             self.target_text_widget.tag_config("highlight", background="#646e6d")
+
+            #  plot
+            self.target_plot_window.plot_embeddings(
+                True, marker="o", sentence_range=index
+            )
 
             # unmark previous sentence
             if index > 0:

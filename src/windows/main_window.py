@@ -66,6 +66,30 @@ class MainWindow(BaseWindow):
             self.information_window_button.config(text="Open Information Retrival")
         self.information_window_button.pack()
 
+        # Plot Window
+        self.plot_window = PlotWindow(Toplevel(self.master))
+        self.plot_window.sentence_structure = {
+            "0": {
+                "words": ["you"],
+                "cluster_labels": [0],
+                "embeddings": [[1.9070455, 1.8492087]],
+                "occurrences": [1],
+            }
+        }.values()
+
+        self.plot_window_button = ttk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_plot_window_button("Plot Window"),
+        )
+
+        if self.plot_window.master.state() == "normal":
+            self.plot_window_button.config(text=f"Close Plot Window")
+        else:
+            self.plot_window_button.config(text="Open Plot Window")
+
+        self.plot_window_button.pack()
+
         # Speed control slider
         self.speed_var = DoubleVar()
         self.speed_slider = ttk.Scale(
@@ -84,7 +108,7 @@ class MainWindow(BaseWindow):
             Toplevel(self.master),
             self.text_window.text_widget,
             self.rsvp_window,
-            self.speed_var.get(),
+            self.plot_window,
         )
         self.audio_window_button = ttk.Button(
             self.frame,
@@ -97,27 +121,6 @@ class MainWindow(BaseWindow):
             self.audio_window_button.config(text="Open Audio Window")
 
         self.audio_window_button.pack()
-
-        # Plot Window
-        # {'you': array([1.9070455, 1.8492087]}
-        self.plot_window = PlotWindow(
-            Toplevel(self.master),
-            {"you": [1.9070455, 1.8492087]},
-            [0],
-        )
-
-        self.plot_window_button = ttk.Button(
-            self.frame,
-            text="",
-            command=lambda: self.toggle_plot_window_button("Plot Window"),
-        )
-
-        if self.plot_window.master.state() == "normal":
-            self.plot_window_button.config(text=f"Close Plot Window")
-        else:
-            self.plot_window_button.config(text="Open Plot Window")
-
-        self.plot_window_button.pack()
 
         # Text Input Window
         self.text_input_window = TextInputWindow(

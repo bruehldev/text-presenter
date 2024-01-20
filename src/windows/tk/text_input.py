@@ -123,7 +123,20 @@ class TextInputWindow(BaseWindow):
             # remove punctuation and other special characters
             filtered_words = [word for word in filtered_words if word.isalpha()]
             text_without_stopwords = " ".join(filtered_words)
+
             text_without_stopwords_tokens = word_tokenize(text_without_stopwords)
+
+            # remove stop words,  punctuation and other special characters for each sentence
+            sentences_without_stopwords = []
+            for sentence in self.sentences:
+                words = word_tokenize(sentence)
+                filtered_words = [
+                    word for word in words if word.lower() not in stop_words
+                ]
+                filtered_words = [word for word in filtered_words if word.isalpha()]
+                # make set
+                filtered_words_set = set(filtered_words)
+                sentences_without_stopwords.append(filtered_words_set)
 
             # TF-IDF
             tfidf_vectorizer = TfidfVectorizer()
@@ -156,11 +169,60 @@ class TextInputWindow(BaseWindow):
             self.information_window.master.update()
             # self.process_information()
         if self.topic_clustering_var.get():
+            self.sentence_structure = {}
             # update plot window
-            word_and_embeddigs = get_words_and_embeddings(text_without_stopwords)
-            cluster_labels = get_cluster_labels(word_and_embeddigs)
-            self.plot_window.word_to_embedding = word_and_embeddigs
+            words_and_embeddings = get_words_and_embeddings(self.text)
+
+            # map an index to each word
+
+            # remove stop words and special characters from word_and_embeddigs
+            for word in list(words_and_embeddings.keys()):
+                if word.lower() in stop_words:
+                    del words_and_embeddings[word]
+                elif not word.isalpha():
+                    del words_and_embeddings[word]
+
+            cluster_labels = get_cluster_labels(words_and_embeddings)
+            key_list = list(words_and_embeddings.keys())
+
+            for index, sentence in enumerate(self.sentences):
+                words = []
+                cluster = []
+                embeddings = []
+                occurrences = []
+                for word in words_and_embeddings.keys():
+                    if word.lower() in sentence.lower():
+                        words.append(word)
+                        cluster.append(cluster_labels[key_list.index(word)])
+                        embeddings.append(words_and_embeddings[word])
+
+                        # if word occurs in this or previous sentences, add 1 to occurrences
+                        occurrences.append(
+                            len(
+                                [
+                                    sentence
+                                    for sentence in self.sentences[: index + 1]
+                                    if word in sentence.lower()
+                                ]
+                            )
+                        )
+
+                        # only keep one occurrence of the word and keep the last one
+
+                self.sentence_structure[index] = {
+                    "words": words,
+                    "cluster_labels": cluster,
+                    "embeddings": embeddings,
+                    "occurrences": occurrences,
+                }
+
+            # print each word in word_and_embeddigs
+            for word in words_and_embeddings.keys():
+                print(word)
+
+            self.plot_window.word_to_embedding = words_and_embeddings
             self.plot_window.cluster_labels = cluster_labels
+            self.plot_window.sentence_structure = self.sentence_structure
             self.plot_window.figure = self.plot_window.plot_embeddings(True)
 
         messagebox.showinfo("Done", "Text processed!")
@@ -173,8 +235,8 @@ class TextInputWindow(BaseWindow):
         self.sentences = nltk.sent_tokenize(self.text)
         self.text_window.text_widget.config(state=NORMAL)
         self.text_window.text_widget.delete("1.0", "end")
-        self.text_window.text_widget.insert("1.0", self.text_input.get("1.0", "end-1c"))
+        self.text_window.text_widget.insert("1.0", self.text)
         self.text_window.text_widget.config(state=DISABLED)
         self.audio_window.sentences = self.sentences
         # update question answer window
-        self.qa_window.text = self.text_input.get("1.0", "end-1c")
+        self.qa_window.text = self.text
