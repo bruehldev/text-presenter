@@ -18,14 +18,12 @@ class rsvpWindow(BaseWindow):
         self.frame = ttk.Frame(self.master, padding=10, border=1)
         self.frame.pack(fill=BOTH, expand=True)
 
-        self.keyphrases = ["sentence", "testing", "wraplength"]
-        self.text = "A sentence example for testing wraplength; it's quite lengthy, demonstrating how the feature adjusts text in the Tkinter window."
+        self.keyphrases = ["sentence", "testing", "screen"]
+        self.text = "A sentence example for testing the font size and window; it's quite lengthy, demonstrating how the feature adjusts text in the Tkinter window to fit the screen size."
         self.color_dict = color_dict
         self.sentence_structure = None
 
-        # Initial wraplength
-        self.wraplength = 300
-        self.font_size = 24  # Initial font size
+        self.font_size = 24
 
         self.word_text = Text(
             self.frame,
@@ -38,7 +36,6 @@ class rsvpWindow(BaseWindow):
 
         self.update_text_display(self.text)
         self.underline_keyphrases()
-        self.load_wraplength()
         self.load_font_size()
         self.word_text.pack(fill=BOTH, expand=True)
         self.word_text.config(state=DISABLED)
@@ -98,17 +95,6 @@ class rsvpWindow(BaseWindow):
                     self.word_text.tag_add(cluster_label, start_idx, end_idx)
                     start_idx = end_idx
 
-    def increase_wraplength(self):
-        self.wraplength += 50
-        self.word_text.config(width=self.wraplength)
-        self.save_wraplength()
-
-    def decrease_wraplength(self):
-        if self.wraplength > 50:
-            self.wraplength -= 50
-            self.word_text.config(width=self.wraplength)
-            self.save_wraplength()
-
     def increase_text_size(self):
         self.font_size += 2
         self.word_text.config(font=("Helvetica", self.font_size))
@@ -120,17 +106,8 @@ class rsvpWindow(BaseWindow):
             self.word_text.config(font=("Helvetica", self.font_size))
             self.save_font_size()
 
-    def save_wraplength(self):
-        set_config_parameter("rsvp_window", "wraplength", self.wraplength)
-
     def save_font_size(self):
         set_config_parameter("rsvp_window", "font_size", self.font_size)
-
-    def load_wraplength(self):
-        loaded_wraplength = get_config_parameter("rsvp_window", "wraplength")
-        if loaded_wraplength is not None:
-            self.wraplength = loaded_wraplength
-            self.word_text.config(width=self.wraplength)
 
     def load_font_size(self):
         loaded_font_size = get_config_parameter("rsvp_window", "font_size")

@@ -76,12 +76,6 @@ class AudioWindow(BaseWindow):
         )
         self.font_size_label.pack(side=BOTTOM)
 
-        # Label to display wraplength
-        self.wraplength_label = ttk.Label(
-            self.frame, text=f"Wraplength: {self.target_rsvp_window.wraplength}"
-        )
-        self.wraplength_label.pack(side=BOTTOM)
-
         # Button to decrease text size
         self.decrease_text_size_button = ttk.Button(
             self.frame, text="Decrease Text Size", command=self.decrease_text_size
@@ -93,18 +87,6 @@ class AudioWindow(BaseWindow):
             self.frame, text="Increase Text Size", command=self.increase_text_size
         )
         self.increase_text_size_button.pack(side=BOTTOM)
-
-        # Button to decrease wraplength
-        self.decrease_wraplength_button = ttk.Button(
-            self.frame, text="Decrease Wraplength", command=self.decrease_wraplength
-        )
-        self.decrease_wraplength_button.pack(side=BOTTOM)
-
-        # Button to increase wraplength
-        self.increase_wraplength_button = ttk.Button(
-            self.frame, text="Increase Wraplength", command=self.increase_wraplength
-        )
-        self.increase_wraplength_button.pack(side=BOTTOM)
 
     def update_font_size_label(self):
         self.font_size_label.config(
@@ -118,19 +100,6 @@ class AudioWindow(BaseWindow):
     def decrease_text_size(self):
         self.target_rsvp_window.decrease_text_size()
         self.update_font_size_label()
-
-    def update_wraplength_label(self):
-        self.wraplength_label.config(
-            text=f"Wraplength: {self.target_rsvp_window.wraplength}"
-        )
-
-    def increase_wraplength(self):
-        self.target_rsvp_window.increase_wraplength()
-        self.update_wraplength_label()
-
-    def decrease_wraplength(self):
-        self.target_rsvp_window.decrease_wraplength()
-        self.update_wraplength_label()
 
     def load_model_name(self):
         self.selected_model.set(get_config_parameter("audio_window", "model_name"))
