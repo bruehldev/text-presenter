@@ -132,7 +132,6 @@ class TextInputWindow(BaseWindow):
     def process_text(self):
         # check if text is to short
         min_text_length = 50
-        print(len(self.text_input.get("1.0", END)))
         if len(self.text_input.get("1.0", END)) < min_text_length:
             messagebox.showerror(
                 "Error",
@@ -306,8 +305,8 @@ class TextInputWindow(BaseWindow):
 
             # add outliers
             cluster_name_mappings[-1] = "Outliers"
-            print("cluster_name_mappings")
-            print(cluster_name_mappings)
+            # print("cluster_name_mappings")
+            # print(cluster_name_mappings)
 
             # add topics from cluster names to information window except outliers
             self.information_window.topics = [

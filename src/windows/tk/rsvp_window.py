@@ -67,8 +67,8 @@ class rsvpWindow(BaseWindow):
                     start_idx = end_idx
 
     def highlight_words(self):
-        print("highlight_words")
-        print(self.sentence_structure)
+        # print("highlight_words")
+        # print(self.sentence_structure)
         if self.sentence_structure is None:
             return
         for sentence in self.sentence_structure.values():
