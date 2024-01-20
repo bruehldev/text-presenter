@@ -6,10 +6,11 @@ from cycler import cycler
 
 
 class PlotWindow(BaseWindow):
-    def __init__(self, master):
+    def __init__(self, master, color_dict):
         super().__init__(master, "Plot", "config/plot.conf")
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
+        self.color_dict = color_dict
         self.sentence_structure = None
         self.cluster_name_mappings = None
         # {1: 'name', 0: 'using', 3: 'word', 2: 'tf'}
@@ -78,8 +79,7 @@ class PlotWindow(BaseWindow):
             plt.scatter(
                 *zip(*cluster_embeddings),
                 s=cluster_occurrences,
-                c=cluster_labels,
-                cmap="viridis",
+                c=[self.color_dict[label] for label in cluster_labels],
                 marker=marker,
                 label=self.cluster_name_mappings[cluster],
             )

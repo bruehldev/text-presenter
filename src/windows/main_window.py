@@ -8,6 +8,28 @@ from src.windows.tk.information_window import InformationWindow
 from src.windows.tk.qa_window import QAWindow
 from src.windows.tk.plot_window import PlotWindow
 
+# Color dict for clustering - Add more colors as needed
+color_dict = {
+    -1: "gray",
+    0: "green",
+    1: "blue",
+    2: "red",
+    3: "orange",
+    4: "purple",
+    5: "brown",
+    6: "pink",
+    7: "olive",
+    8: "cyan",
+    9: "magenta",
+    10: "yellow",
+    11: "black",
+    12: "lightblue",
+    13: "lightgreen",
+    14: "lightgray",
+    15: "darkblue",
+    16: "darkgreen",
+}
+
 
 class MainWindow(BaseWindow):
     def __init__(self, master):
@@ -67,7 +89,7 @@ class MainWindow(BaseWindow):
         self.information_window_button.pack()
 
         # Plot Window
-        self.plot_window = PlotWindow(Toplevel(self.master))
+        self.plot_window = PlotWindow(Toplevel(self.master), color_dict)
         self.plot_window.sentence_structure = {
             "0": {
                 "words": ["you"],
