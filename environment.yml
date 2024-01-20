@@ -19,3 +19,4 @@ dependencies:
     - pydub
     - hdbscan
     - ttkthemes
+    - sentencepiece
