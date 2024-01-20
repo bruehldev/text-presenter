@@ -41,6 +41,7 @@ class rsvpWindow(BaseWindow):
         self.load_wraplength()
         self.load_font_size()
         self.word_text.pack(fill=BOTH, expand=True)
+        self.word_text.config(state=DISABLED)
 
     def update_text_display(self, text):
         self.word_text.config(state=NORMAL)

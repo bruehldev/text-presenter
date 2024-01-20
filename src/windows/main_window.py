@@ -7,6 +7,7 @@ from src.windows.tk.rsvp_window import rsvpWindow
 from src.windows.tk.information_window import InformationWindow
 from src.windows.tk.qa_window import QAWindow
 from src.windows.tk.plot_window import PlotWindow
+from src.windows.tk.summerization_window import SummerizationWindow
 
 # Color dict for clustering - Add more colors as needed
 color_dict = {
@@ -48,6 +49,21 @@ class MainWindow(BaseWindow):
         else:
             self.text_window_button.config(text="Open Text Window")
         self.text_window_button.pack()
+
+        # Summerization Window
+        self.summerization_window = SummerizationWindow(Toplevel(self.master))
+        self.summerization_window_button = ttk.Button(
+            self.frame,
+            text="",
+            command=lambda: self.toggle_summerization_window_button(
+                "Summerization Window"
+            ),
+        )
+        if self.summerization_window.master.state() == "normal":
+            self.summerization_window_button.config(text=f"Close Summerization Window")
+        else:
+            self.summerization_window_button.config(text="Open Summerization Window")
+        self.summerization_window_button.pack()
 
         # Question Answer Window
         self.qa_window = QAWindow(Toplevel(self.master))
@@ -153,6 +169,7 @@ class MainWindow(BaseWindow):
             self.qa_window,
             self.plot_window,
             self.rsvp_window,
+            self.summerization_window,
         )
         self.text_input_button = ttk.Button(
             self.frame,
@@ -241,6 +258,14 @@ class MainWindow(BaseWindow):
         else:
             self.text_window.master.deiconify()
             self.text_window_button.config(text=f"Close {name}")
+
+    def toggle_summerization_window_button(self, name):
+        if self.summerization_window.master.state() == "normal":
+            self.summerization_window.master.withdraw()
+            self.summerization_window_button.config(text=f"Open {name}")
+        else:
+            self.summerization_window.master.deiconify()
+            self.summerization_window_button.config(text=f"Close {name}")
 
     def toggle_audio_window_button(self, name):
         if self.audio_window.master.state() == "normal":

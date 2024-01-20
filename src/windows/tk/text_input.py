@@ -27,6 +27,7 @@ class TextInputWindow(BaseWindow):
         qa_window,
         plot_window,
         rsvp_window,
+        summerization_window,
     ):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.frame = ttk.Frame(self.master)
@@ -43,6 +44,7 @@ class TextInputWindow(BaseWindow):
         )
         self.text_input.pack(fill="both", expand=True)
         self.text_window = text_window
+        self.summerization_window = summerization_window
         self.audio_window = audio_window
         self.information_window = information_window
         self.qa_window = qa_window
@@ -53,6 +55,7 @@ class TextInputWindow(BaseWindow):
         self.audio_processing_var = IntVar(value=self.audio_checkbox_state)
         self.information_processing_var = IntVar(value=self.information_checkbox_state)
         self.topic_clustering_var = IntVar(value=self.information_checkbox_state)
+        self.summerization_var = IntVar(value=self.information_checkbox_state)
 
         # Checkboxes for processing windows
         ttk.Checkbutton(
@@ -67,10 +70,16 @@ class TextInputWindow(BaseWindow):
             variable=self.information_processing_var,
             command=self.save_checkbox_states,
         ).pack()
-        topic_clustering_checkbox = ttk.Checkbutton(
+        ttk.Checkbutton(
             self.frame,
             text="Topic Clustering",
             variable=self.topic_clustering_var,
+            command=self.save_checkbox_states,
+        ).pack()
+        ttk.Checkbutton(
+            self.frame,
+            text="Summerization",
+            variable=self.summerization_var,
             command=self.save_checkbox_states,
         ).pack()
 
@@ -96,6 +105,10 @@ class TextInputWindow(BaseWindow):
                 "text_input", "topic_clustering"
             )
 
+        self.summerization_checkbox_state = get_config_parameter(
+            "text_input", "summerization"
+        )
+
     def save_checkbox_states(self):
         set_config_parameter(
             "text_input", "audio_processing", self.audio_processing_var.get()
@@ -111,13 +124,21 @@ class TextInputWindow(BaseWindow):
             # update checkbox
             self.topic_clustering_var.set(0)
 
+        # set summerization checkbox
+        set_config_parameter(
+            "text_input", "summerization", self.summerization_var.get()
+        )
+
     def process_text(self):
         self.update_text_display()
 
         # Update selected processing steps
+
+        ### Audio ###
         if self.audio_processing_var.get():
             self.audio_window.generate_audio(self.sentences, self.title)
 
+        ### Information Retrieval ###
         if self.information_processing_var.get():
             # extract and set frequent words
             words = word_tokenize(self.text)
@@ -177,6 +198,8 @@ class TextInputWindow(BaseWindow):
             self.information_window.on_dropdown_change(None)
             self.information_window.master.update()
             # self.process_information()
+
+        ### Topic Clustering ###
         if self.topic_clustering_var.get():
             self.sentence_structure = {}
             # update plot window
@@ -272,6 +295,10 @@ class TextInputWindow(BaseWindow):
             self.text_window.highlight_words()
             self.plot_window.cluster_name_mappings = cluster_name_mappings
             self.plot_window.figure = self.plot_window.plot_embeddings(True)
+
+        ### Summerization ###
+        if self.summerization_var.get():
+            self.summerization_window.summarize(self.text)
 
         messagebox.showinfo("Done", "Text processed!")
 
