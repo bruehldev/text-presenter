@@ -13,7 +13,7 @@ class InformationWindow(BaseWindow):
         self.dropdown = ttk.Combobox(
             self.frame,
             textvariable=self.dropdown_var,
-            values=["Keyphrases", "Listbox2", "Frequent Words"],
+            values=["Keyphrases", "Listbox2", "Frequent Words", "Bulletpoints"],
         )
         self.dropdown.pack()
 
@@ -32,6 +32,13 @@ class InformationWindow(BaseWindow):
         self.frequent_words_listbox.configure(bg="black", fg="white")
         self.keyphrases_listbox.pack(fill="both", expand=True)
 
+        # Possible bulletpoints
+        self.bulletpoints = None
+        self.bulletpoints_listbox = Listbox(self.frame)
+        self.bulletpoints_listbox.configure(bg="black", fg="white")
+        self.bulletpoints_listbox.pack(fill="both", expand=True)
+
+        # TODO REMOVE THIS
         # Additional listbox for Listbox2
         self.listbox2 = Listbox(self.frame)
         self.listbox2.configure(bg="black", fg="white")
@@ -46,6 +53,7 @@ class InformationWindow(BaseWindow):
         self.keyphrases_listbox.pack_forget()
         self.frequent_words_listbox.pack_forget()
         self.listbox2.pack_forget()
+        self.bulletpoints_listbox.pack_forget()
 
         if selected_value == "Keyphrases":
             self.keyphrases_listbox.delete(0, END)
@@ -73,3 +81,10 @@ class InformationWindow(BaseWindow):
             self.listbox2.delete(0, END)
             for item in ["1", "2", "3"]:
                 self.listbox2.insert(END, item)
+        elif selected_value == "Bulletpoints":
+            self.bulletpoints_listbox.delete(0, END)
+            if self.bulletpoints is None:
+                return
+            for bulletpoint in self.bulletpoints:
+                self.bulletpoints_listbox.insert(END, bulletpoint)
+            self.bulletpoints_listbox.pack(fill="both", expand=True)

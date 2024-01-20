@@ -55,7 +55,7 @@ class TextInputWindow(BaseWindow):
         self.audio_processing_var = IntVar(value=self.audio_checkbox_state)
         self.information_processing_var = IntVar(value=self.information_checkbox_state)
         self.topic_clustering_var = IntVar(value=self.information_checkbox_state)
-        self.summerization_var = IntVar(value=self.information_checkbox_state)
+        self.summerization_var = IntVar(value=self.summerization_checkbox_state)
 
         # Checkboxes for processing windows
         ttk.Checkbutton(
@@ -185,7 +185,6 @@ class TextInputWindow(BaseWindow):
             self.information_window.keyphrases = self.keyphrases
             self.text_window.keyphrases = self.keyphrases
             self.rsvp_window.keyphrases = self.keyphrases
-
             self.text_window.underline_keyphrases()
 
             # generate and set headline
@@ -195,6 +194,7 @@ class TextInputWindow(BaseWindow):
             self.audio_window.title = headline
 
             # update information window
+            self.information_window.dropdown_var.set("Keyphrases")
             self.information_window.on_dropdown_change(None)
             self.information_window.master.update()
             # self.process_information()
@@ -298,7 +298,15 @@ class TextInputWindow(BaseWindow):
 
         ### Summerization ###
         if self.summerization_var.get():
-            self.summerization_window.summarize(self.text)
+            possible_bulletpoint = self.summerization_window.summarize(self.text)
+
+            # Add bulletpoint information to information window
+            self.information_window.bulletpoints = possible_bulletpoint
+            # change view to bulletpoints when information retrieval is off
+            if not self.information_processing_var.get():
+                self.information_window.dropdown_var.set("Bulletpoints")
+                self.information_window.on_dropdown_change(None)
+                self.information_window.master.update()
 
         messagebox.showinfo("Done", "Text processed!")
 
