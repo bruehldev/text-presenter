@@ -132,10 +132,10 @@ class MainWindow(BaseWindow):
         self.speed_var = DoubleVar()
         self.speed_slider = ttk.Scale(
             self.frame,
-            from_=0.1,
-            to=2.0,
+            from_=3.0,
+            to=13.0,
             variable=self.speed_var,
-            length=200,
+            length=400,
             orient="horizontal",
         )
         self.speed_slider.set(1.0)
