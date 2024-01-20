@@ -1,6 +1,6 @@
 import os
 import threading
-from tkinter import ttk, StringVar, BOTTOM
+from tkinter import ttk, StringVar, BOTTOM, NORMAL, DISABLED
 from tkinter import messagebox
 from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
 from src.services.audio_manager import (
@@ -147,9 +147,8 @@ class AudioWindow(BaseWindow):
             if self.sentences is None:
                 messagebox.showerror("No Text", "No text to process!")
                 return
-            # update rsvp with sentence
-            self.target_rsvp_window.word_label.config(text=self.sentences[index])
-            self.target_rsvp_window.master.update()
+            # update rsvp
+            self.target_rsvp_window.update_text_display(sentence)
 
             # update text widget with highlighted sentence
             pointer_start = "1.0"
@@ -201,7 +200,9 @@ class AudioWindow(BaseWindow):
         audio_files.sort()
 
         # update rsvp with title
-        self.target_rsvp_window.word_label.config(text="Title: " + str(self.title))
+        # self.target_rsvp_window.word_text.delete("1.0", "end")
+        # self.target_rsvp_window.word_text.insert("1.0", self.title)
+        # self.target_rsvp_window.word_text.config(text=self.title)
 
         self.target_rsvp_window.master.update()
 

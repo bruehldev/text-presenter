@@ -25,11 +25,13 @@ class TextInputWindow(BaseWindow):
         information_window,
         qa_window,
         plot_window,
+        rsvp_window,
     ):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         self.keyphrases = None
+        self.rsvp_window = rsvp_window
         bg_color = self.master.winfo_toplevel().cget("bg")
         self.text_input = Text(
             self.frame,
@@ -161,6 +163,7 @@ class TextInputWindow(BaseWindow):
             self.information_window.keyphrases = self.keyphrases
 
             if self.keyphrases is not None:
+                self.rsvp_window.keyphrases = self.keyphrases
                 # configure the "underline" tag
                 self.text_window.text_widget.tag_config("underline", underline=True)
 
@@ -191,8 +194,6 @@ class TextInputWindow(BaseWindow):
             self.sentence_structure = {}
             # update plot window
             words_and_embeddings = get_words_and_embeddings(self.text)
-
-            # map an index to each word
 
             # remove stop words and special characters from word_and_embeddigs
             for word in list(words_and_embeddings.keys()):

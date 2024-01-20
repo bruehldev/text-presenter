@@ -130,6 +130,7 @@ class MainWindow(BaseWindow):
             self.information_window,
             self.qa_window,
             self.plot_window,
+            self.rsvp_window,
         )
         self.text_input_button = ttk.Button(
             self.frame,
@@ -150,7 +151,7 @@ class MainWindow(BaseWindow):
                 self.speed_var.get(),
                 self.text_input_window.text_input.get("1.0", "end-1c"),
                 self.text_window.text_widget,
-                self.rsvp_window.word_label,
+                self.rsvp_window.word_text,
                 self.rsvp_window.master,
             ),
         )
