@@ -114,3 +114,10 @@ class rsvpWindow(BaseWindow):
         if loaded_font_size is not None:
             self.font_size = loaded_font_size
             self.word_text.config(font=("Helvetica", self.font_size))
+
+    def reset(self):
+        self.word_text.config(state=NORMAL)
+        self.word_text.delete("1.0", END)
+        self.word_text.config(state=DISABLED)
+        self.keyphrases = []
+        self.text = ""

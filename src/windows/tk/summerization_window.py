@@ -69,10 +69,25 @@ class SummerizationWindow(BaseWindow):
             for word in words:
                 merged_important_words.add(word)
 
+        # remove verbs and adjectives and adverbs from set
+        for word in merged_important_words.copy():
+            if nltk.pos_tag([word])[0][1] in ["VB", "JJ", "RB"]:
+                merged_important_words.remove(word)
+
+        # sort words by length
+        merged_important_words = sorted(
+            merged_important_words, key=lambda x: len(x), reverse=True
+        )
+
         return merged_important_words
 
     def update_text_display(self, text):
         self.text_widget.config(state=NORMAL)
         self.text_widget.delete("1.0", END)
         self.text_widget.insert("1.0", text)
+        self.text_widget.config(state=DISABLED)
+
+    def reset(self):
+        self.text_widget.config(state=NORMAL)
+        self.text_widget.delete("1.0", END)
         self.text_widget.config(state=DISABLED)

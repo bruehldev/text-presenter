@@ -198,3 +198,6 @@ class AudioWindow(BaseWindow):
             return
         generate_tts(sentences, self.selected_model.get())
         # generate_tts_title(title, self.selected_model.get())
+
+    def reset(self):
+        pass

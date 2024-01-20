@@ -112,3 +112,10 @@ class PlotWindow(BaseWindow):
         for child in self.frame.winfo_children():
             if isinstance(child, NavigationToolbar2Tk):
                 child.destroy()
+
+    def reset(self):
+        self.destroy_plot()
+        self.sentence_structure = None
+        self.cluster_name_mappings = None
+        self.canvas = None
+        self.figure = self.plot_embeddings(False)

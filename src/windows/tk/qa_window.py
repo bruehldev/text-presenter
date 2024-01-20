@@ -35,3 +35,10 @@ class QAWindow(BaseWindow):
     def display_answer(self):
         self.text_widget.delete("1.0", END)
         self.text_widget.insert(END, self.answer)
+
+    def reset(self):
+        self.text_widget.delete("1.0", END)
+        self.question_input.delete("1.0", END)
+        self.text = ""
+        self.answer = ""
+        self.question = ""

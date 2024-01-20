@@ -130,6 +130,15 @@ class TextInputWindow(BaseWindow):
         )
 
     def process_text(self):
+        # reset previous processing
+        self.text_window.reset()
+        self.audio_window.reset()
+        self.information_window.reset()
+        self.plot_window.reset()
+        self.rsvp_window.reset()
+        self.qa_window.reset()
+        self.summerization_window.reset()
+
         self.update_text_display()
 
         # Update selected processing steps

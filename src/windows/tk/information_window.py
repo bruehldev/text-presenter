@@ -88,3 +88,10 @@ class InformationWindow(BaseWindow):
             for bulletpoint in self.bulletpoints:
                 self.bulletpoints_listbox.insert(END, bulletpoint)
             self.bulletpoints_listbox.pack(fill="both", expand=True)
+
+    def reset(self):
+        self.keyphrases_listbox.delete(0, END)
+        self.frequent_words_listbox.delete(0, END)
+        self.bulletpoints_listbox.delete(0, END)
+        self.listbox2.delete(0, END)
+        self.dropdown_var.set("Keyphrases")

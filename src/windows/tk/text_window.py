@@ -75,3 +75,11 @@ class TextWindow(BaseWindow):
                     end_idx = f"{start_idx}+{len(word)}c"
                     self.text_widget.tag_add(cluster_label, start_idx, end_idx)
                     start_idx = end_idx
+
+    def reset(self):
+        self.text_widget.config(state=NORMAL)
+        self.text_widget.delete("1.0", END)
+        self.text_widget.config(state=DISABLED)
+        self.keyphrases = []
+        self.text = ""
+        self.sentence_structure = None
