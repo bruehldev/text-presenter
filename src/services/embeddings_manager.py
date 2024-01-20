@@ -16,47 +16,53 @@ model = model.to(device)
 
 def get_words_and_embeddings(text):
     # Tokenize the text
-    tokens = tokenizer(text)
-    input_ids = torch.tensor([tokens["input_ids"]]).to(device)
+    tokens = tokenizer(text, truncation=True, return_tensors="pt", max_length=512)
 
-    # Get BERT embeddings
-    with torch.no_grad():
-        outputs = model(input_ids)
-        hidden_states = outputs[0]
-        first_token_embeddings = hidden_states[0]
+    # Split the input into chunks of 512 tokens or less
+    input_ids_chunks = tokens["input_ids"].split(512)
 
-    # Reduce embeddings to 2 dimensions using UMAP
-    reducer = umap.UMAP()
-    first_token_embeddings_cpu = first_token_embeddings.cpu()
-    reduced_embeddings = reducer.fit_transform(first_token_embeddings_cpu)
+    # Initialize an empty list to store the embeddings
+    all_embeddings = []
 
-    # Aggregate subword embeddings to obtain word embeddings
-    word_to_embedding = {}
-    current_word = ""
-    current_position = []
+    for input_ids in input_ids_chunks:
+        input_ids = input_ids.to(device)
 
-    for i, (word_id, embedding) in enumerate(
-        zip(tokens["input_ids"], reduced_embeddings)
-    ):
-        # skip first and last token
-        if i in [0, len(tokens["input_ids"]) - 1]:
-            continue
+        # Get BERT embeddings
+        with torch.no_grad():
+            outputs = model(input_ids)
+            hidden_states = outputs[0]
+            first_token_embeddings = hidden_states[0]
 
-        word = tokenizer.convert_ids_to_tokens([word_id])[0]
-        if "##" in word:
-            current_word += word.replace("##", "")
-            current_position.append(embedding)
-        else:
-            if current_word:  # Only aggregate when current_word is not empty
-                aggregated_embedding = np.mean(current_position, axis=0)
-                word_to_embedding[current_word] = aggregated_embedding
-            current_word = word  # Start a new word
-            current_position = [embedding]  # Start a new position list
+        # Reduce embeddings to 2 dimensions using UMAP
+        reducer = umap.UMAP()
+        first_token_embeddings_cpu = first_token_embeddings.cpu()
+        reduced_embeddings = reducer.fit_transform(first_token_embeddings_cpu)
 
-    # aggregate the last word
-    if current_word:
-        aggregated_embedding = np.mean(current_position, axis=0)
-        word_to_embedding[current_word] = aggregated_embedding
+        # Aggregate subword embeddings to obtain word embeddings
+        word_to_embedding = {}
+        current_word = ""
+        current_position = []
+
+        for i, (word_id, embedding) in enumerate(zip(input_ids[0], reduced_embeddings)):
+            # skip first and last token
+            if i in [0, len(input_ids[0]) - 1]:
+                continue
+
+            word = tokenizer.convert_ids_to_tokens([word_id])[0]
+            if "##" in word:
+                current_word += word.replace("##", "")
+                current_position.append(embedding)
+            else:
+                if current_word:  # Only aggregate when current_word is not empty
+                    aggregated_embedding = np.mean(current_position, axis=0)
+                    word_to_embedding[current_word] = aggregated_embedding
+                current_word = word  # Start a new word
+                current_position = [embedding]  # Start a new position list
+
+        # aggregate the last word
+        if current_word:
+            aggregated_embedding = np.mean(current_position, axis=0)
+            word_to_embedding[current_word] = aggregated_embedding
 
     return word_to_embedding
 
