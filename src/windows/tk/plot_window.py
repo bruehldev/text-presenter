@@ -40,8 +40,8 @@ class PlotWindow(BaseWindow):
                 self.sentence_structure, 0, sentence_range
             ).values()
         )
-        print("sentences_to_plot")
-        print(sentences_to_plot)
+        # print("sentences_to_plot")
+        # print(sentences_to_plot)
 
         all_embeddings = []
         all_colors = []

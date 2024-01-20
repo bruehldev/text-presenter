@@ -29,6 +29,7 @@ class TextInputWindow(BaseWindow):
         super().__init__(master, "Text Input", "config/text_input.conf")
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
+        self.keyphrases = None
         bg_color = self.master.winfo_toplevel().cget("bg")
         self.text_input = Text(
             self.frame,
@@ -147,7 +148,8 @@ class TextInputWindow(BaseWindow):
             sorted_features = sorted(
                 features_and_scores, key=lambda x: x[1], reverse=True
             )
-            print(sorted_features)
+            # TODO use sorted_features
+            # print(sorted_features)
 
             freq_dist_without_stopwords = FreqDist(text_without_stopwords_tokens)
             self.information_window.frequent_words = (
@@ -155,8 +157,25 @@ class TextInputWindow(BaseWindow):
             )
 
             # extract and set keyphrases
-            keyphrases = extract_keyphrases(self.text)
-            self.information_window.keyphrases = keyphrases
+            self.keyphrases = extract_keyphrases(self.text)
+            self.information_window.keyphrases = self.keyphrases
+
+            if self.keyphrases is not None:
+                # configure the "underline" tag
+                self.text_window.text_widget.tag_config("underline", underline=True)
+
+                # underline keyphrases in text widget
+                for keyphrase in self.keyphrases:
+                    pointer_start = "1.0"
+                    pointer_end = "1.0"
+                    pointer_start = self.text_window.text_widget.search(
+                        keyphrase, pointer_end, stopindex="end"
+                    )
+                    pointer_end = f"{pointer_start}+{len(keyphrase)}c"
+
+                    self.text_window.text_widget.tag_add(
+                        "underline", pointer_start, pointer_end
+                    )
 
             # generate and set headline
             headline = generate_headline(self.text)
@@ -217,8 +236,8 @@ class TextInputWindow(BaseWindow):
                 }
 
             # print each word in word_and_embeddigs
-            for word in words_and_embeddings.keys():
-                print(word)
+            # for word in words_and_embeddings.keys():
+            # print(word)
 
             self.plot_window.word_to_embedding = words_and_embeddings
             self.plot_window.cluster_labels = cluster_labels
