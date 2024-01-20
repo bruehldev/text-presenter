@@ -10,6 +10,7 @@ from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tkinter import messagebox
+import random
 
 
 nltk.download("punkt")
@@ -233,14 +234,51 @@ class TextInputWindow(BaseWindow):
                             )
                         )
 
-                        # only keep one occurrence of the word and keep the last one
-
                 self.sentence_structure[index] = {
                     "words": words,
                     "cluster_labels": cluster,
                     "embeddings": embeddings,
                     "occurrences": occurrences,
                 }
+
+            # give each cluster a name based on the occurrence of the word. If multiple words have the same occurrence, pick 2 random words as title
+            cluster_name_mappings = {}
+            for sentence in self.sentence_structure.values():
+                for word, cluster_label, occurrence in zip(
+                    sentence["words"],
+                    sentence["cluster_labels"],
+                    sentence["occurrences"],
+                ):
+                    if cluster_label == -1:
+                        continue
+                    if cluster_label not in cluster_name_mappings.keys():
+                        cluster_name_mappings[cluster_label] = {}
+                    if occurrence not in cluster_name_mappings[cluster_label].keys():
+                        cluster_name_mappings[cluster_label][occurrence] = []
+                    cluster_name_mappings[cluster_label][occurrence].append(word)
+
+            # print("cluster_name_mappings")
+            # print(cluster_name_mappings)
+
+            for cluster_label, occurrences in cluster_name_mappings.items():
+                # get the most common occurrence
+                most_common_occurrence = max(occurrences.keys())
+                # get the words with the most common occurrence
+                words_with_most_common_occurrence = occurrences[most_common_occurrence]
+                # pick 2 random words
+                if len(words_with_most_common_occurrence) > 2:
+                    random.shuffle(words_with_most_common_occurrence)
+                    words_with_most_common_occurrence = (
+                        words_with_most_common_occurrence[:2]
+                    )
+                # join the words
+                cluster_name = " ".join(words_with_most_common_occurrence)
+                cluster_name_mappings[cluster_label] = cluster_name
+
+            # add outliers
+            cluster_name_mappings[-1] = "Outliers"
+            print("cluster_name_mappings")
+            print(cluster_name_mappings)
 
             # print each word in word_and_embeddigs
             # for word in words_and_embeddings.keys():
@@ -249,6 +287,7 @@ class TextInputWindow(BaseWindow):
             self.plot_window.word_to_embedding = words_and_embeddings
             self.plot_window.cluster_labels = cluster_labels
             self.plot_window.sentence_structure = self.sentence_structure
+            self.plot_window.cluster_name_mappings = cluster_name_mappings
             self.plot_window.figure = self.plot_window.plot_embeddings(True)
 
         messagebox.showinfo("Done", "Text processed!")

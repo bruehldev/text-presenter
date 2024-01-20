@@ -1,8 +1,7 @@
 from tkinter import ttk
 from src.windows.tk.base_window import BaseWindow
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk, FigureCanvasTkAgg
 from cycler import cycler
 
 
@@ -12,6 +11,8 @@ class PlotWindow(BaseWindow):
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         self.sentence_structure = None
+        self.cluster_name_mappings = None
+        # {1: 'name', 0: 'using', 3: 'word', 2: 'tf'}
         self.canvas = None
         self.figure = self.plot_embeddings(False)
 
@@ -44,8 +45,8 @@ class PlotWindow(BaseWindow):
         # print(sentences_to_plot)
 
         all_embeddings = []
-        all_colors = []
-        all_sizes = []
+        all_cluster = []
+        all_occurrences = []
         all_labels = []
 
         for sentence in sentences_to_plot:
@@ -58,17 +59,33 @@ class PlotWindow(BaseWindow):
                 words, embeddings, occurrences, cluster_labels
             ):
                 all_embeddings.append(embedding)
-                all_colors.append(cluster_label)
-                all_sizes.append(occurrence * 20)
+                all_cluster.append(cluster_label)
+                all_occurrences.append(occurrence * 20)
                 all_labels.append(word)
 
-        plt.scatter(
-            *zip(*all_embeddings),
-            s=all_sizes,
-            c=all_colors,
-            cmap="viridis",
-            marker=marker
-        )
+        # scatter for each cluster and -1
+        for cluster in set(all_cluster):
+            cluster_embeddings = []
+            cluster_occurrences = []
+            cluster_labels = []
+            for embedding, occurrence, cluster_label in zip(
+                all_embeddings, all_occurrences, all_cluster
+            ):
+                if cluster_label == cluster:
+                    cluster_embeddings.append(embedding)
+                    cluster_occurrences.append(occurrence)
+                    cluster_labels.append(cluster_label)
+            plt.scatter(
+                *zip(*cluster_embeddings),
+                s=cluster_occurrences,
+                c=cluster_labels,
+                cmap="viridis",
+                marker=marker,
+                label=self.cluster_name_mappings[cluster],
+            )
+
+        plt.legend(loc="upper right")
+
         for label, (x, y) in zip(all_labels, all_embeddings):
             plt.text(x, y, label, fontsize=9)
 
