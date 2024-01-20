@@ -130,6 +130,16 @@ class TextInputWindow(BaseWindow):
         )
 
     def process_text(self):
+        # check if text is to short
+        min_text_length = 50
+        print(len(self.text_input.get("1.0", END)))
+        if len(self.text_input.get("1.0", END)) < min_text_length:
+            messagebox.showerror(
+                "Error",
+                f"Text is to short. Please enter at least {min_text_length} characters.",
+            )
+            return
+
         # reset previous processing
         self.text_window.reset()
         self.audio_window.reset()
