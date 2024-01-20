@@ -45,15 +45,21 @@ class rsvpWindow(BaseWindow):
         self.word_text.insert(END, text)
         # underline keyphrases
         for keyphrase in self.keyphrases:
-            start = "1.0"
+            start_idx = "1.0"
             while True:
-                pos = self.word_text.search(keyphrase, start, stopindex=END)
-                if not pos:
+                start_idx = self.word_text.search(
+                    r"\y" + keyphrase + r"\y",
+                    start_idx,
+                    stopindex=END,
+                    regexp=True,
+                )
+                if not start_idx:
                     break
-                end = f"{pos}+{len(keyphrase)}c"
-                self.word_text.tag_add("underline", pos, end)
-                start = end
-        self.word_text.tag_config("underline", underline=1)
+                end_idx = f"{start_idx}+{len(keyphrase)}c"
+                self.word_text.tag_add("underline", start_idx, end_idx)
+                start_idx = end_idx
+
+        self.word_text.tag_config("underline", foreground="white", underline=True)
 
         self.word_text.config(state=DISABLED)
 

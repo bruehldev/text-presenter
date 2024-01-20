@@ -148,6 +148,7 @@ class AudioWindow(BaseWindow):
                 messagebox.showerror("No Text", "No text to process!")
                 return
             # update rsvp
+            sentence = self.sentences[index]
             self.target_rsvp_window.update_text_display(sentence)
 
             # update text widget with highlighted sentence

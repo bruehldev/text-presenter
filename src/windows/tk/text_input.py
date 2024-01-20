@@ -1,4 +1,4 @@
-from tkinter import ttk, NORMAL, DISABLED, IntVar, NORMAL, Text
+from tkinter import ttk, NORMAL, DISABLED, IntVar, NORMAL, Text, END, DISABLED
 from src.windows.tk.base_window import BaseWindow
 import nltk
 from src.services.headline_generator import generate_headline
@@ -168,17 +168,23 @@ class TextInputWindow(BaseWindow):
                 self.text_window.text_widget.tag_config("underline", underline=True)
 
                 # underline keyphrases in text widget
+                # underline keyphrases in text widget
                 for keyphrase in self.keyphrases:
-                    pointer_start = "1.0"
-                    pointer_end = "1.0"
-                    pointer_start = self.text_window.text_widget.search(
-                        keyphrase, pointer_end, stopindex="end"
-                    )
-                    pointer_end = f"{pointer_start}+{len(keyphrase)}c"
-
-                    self.text_window.text_widget.tag_add(
-                        "underline", pointer_start, pointer_end
-                    )
+                    start_idx = "1.0"
+                    while True:
+                        start_idx = self.text_window.text_widget.search(
+                            r"\y" + keyphrase + r"\y",
+                            start_idx,
+                            stopindex=END,
+                            regexp=True,
+                        )
+                        if not start_idx:
+                            break
+                        end_idx = f"{start_idx}+{len(keyphrase)}c"
+                        self.text_window.text_widget.tag_add(
+                            "underline", start_idx, end_idx
+                        )
+                        start_idx = end_idx
 
             # generate and set headline
             headline = generate_headline(self.text)
