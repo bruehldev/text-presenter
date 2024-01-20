@@ -278,6 +278,13 @@ class TextInputWindow(BaseWindow):
                 cluster_name = " ".join(words_with_most_common_occurrence)
                 cluster_name_mappings[cluster_label] = cluster_name
 
+            # if sentence has keyphrase, overwrite cluster name mapping of sentence
+            for index, sentence in enumerate(self.sentences):
+                for keyphrase in self.keyphrases:
+                    if keyphrase.lower() in sentence.lower():
+                        cluster_name_mappings[index] = keyphrase
+                        break
+
             # add outliers
             cluster_name_mappings[-1] = "Outliers"
             print("cluster_name_mappings")
