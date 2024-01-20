@@ -190,7 +190,7 @@ class MainWindow(BaseWindow):
                 self.speed_var.get(),
                 self.text_input_window.text_input.get("1.0", "end-1c"),
                 self.text_window.text_widget,
-                self.rsvp_window.word_text,
+                self.rsvp_window,
                 self.rsvp_window.master,
             ),
         )
@@ -211,8 +211,7 @@ class MainWindow(BaseWindow):
         words_split = words.split()
         for i in range(len(words_split)):
             word = words_split[i]
-            target_word_label.config(text=word)
-            target_word_window.update()
+            target_word_label.update_text_display(word)
 
             # use index to highlight the word in the text widget
             word_pointer_start = target_text_widget.search(
@@ -241,7 +240,7 @@ class MainWindow(BaseWindow):
         # unmark all
         target_text_widget.tag_remove("highlight", "1.0", "end")
         # reset word label
-        target_word_label.config(text="")
+        target_word_label.update_text_display("")
 
     def toggle_text_input_window_button(self, name):
         if self.text_input_window.master.state() == "normal":
