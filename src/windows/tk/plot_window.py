@@ -76,6 +76,12 @@ class PlotWindow(BaseWindow):
                     cluster_embeddings.append(embedding)
                     cluster_occurrences.append(occurrence)
                     cluster_labels.append(cluster_label)
+
+            # if cluster occurrence is 0 (different spelling as token), set it to 20
+            cluster_occurrences = [
+                occurrence if occurrence > 0 else 20
+                for occurrence in cluster_occurrences
+            ]
             plt.scatter(
                 *zip(*cluster_embeddings),
                 s=cluster_occurrences,

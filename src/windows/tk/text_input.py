@@ -260,6 +260,7 @@ class TextInputWindow(BaseWindow):
                     "cluster_labels": cluster,
                     "embeddings": embeddings,
                     "occurrences": occurrences,
+                    "sentence": sentence,
                 }
 
             # give each cluster a name based on the occurrence of the word. If multiple words have the same occurrence, pick 2 random words as title
@@ -296,12 +297,47 @@ class TextInputWindow(BaseWindow):
                 cluster_name = " ".join(words_with_most_common_occurrence)
                 cluster_name_mappings[cluster_label] = cluster_name
 
+            """
             # if sentence has keyphrase, overwrite cluster name mapping of sentence
             for index, sentence in enumerate(self.sentences):
                 for keyphrase in self.keyphrases:
                     if keyphrase.lower() in sentence.lower():
                         cluster_name_mappings[index] = keyphrase
                         break
+            """
+            # sort keyphrases by longest first
+            self.keyphrases = sorted(self.keyphrases, key=len, reverse=True)
+
+            # if cluster_label is in keyphrases, overwrite cluster name mapping of cluster with longest keyphrase
+            names_for_cluster_found = []
+            for keyphrase in self.keyphrases:
+                skip_keyphrase = False
+                if skip_keyphrase:
+                    skip_keyphrase = False
+                    continue
+                # use sentence structure to get cluster labels
+                for sentence in self.sentence_structure.values():
+                    # keyphrase has to be in s
+                    if keyphrase.lower() not in sentence["sentence"].lower():
+                        continue
+
+                    for word, cluster_label in zip(
+                        sentence["words"], sentence["cluster_labels"]
+                    ):
+                        if cluster_label == -1:
+                            continue
+                        # if cluster label is already in names_for_cluster_found, skip
+                        if cluster_label in names_for_cluster_found:
+                            continue
+
+                        if word.lower() in keyphrase.lower():
+                            cluster_name_mappings[cluster_label] = keyphrase
+                            skip_keyphrase = True
+                            names_for_cluster_found.append(cluster_label)
+                            print(
+                                f"i found {word} in {keyphrase} for cluster {cluster_label}"
+                            )
+                            break
 
             # add outliers
             cluster_name_mappings[-1] = "Outliers"
