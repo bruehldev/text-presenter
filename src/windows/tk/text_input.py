@@ -11,6 +11,7 @@ from src.services.config_manager import get_config_parameter, set_config_paramet
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tkinter import messagebox
 import random
+import re
 
 
 nltk.download("punkt")
@@ -89,6 +90,20 @@ class TextInputWindow(BaseWindow):
             command=self.process_text,
         )
         self.send_button.pack()
+
+        self.reset_button = ttk.Button(
+            self.frame,
+            text="Reset",
+            command=self.reset,
+        )
+        self.reset_button.pack()
+
+    def reset(self):
+        self.text_input.delete("1.0", END)
+        self.text = ""
+        self.sentences = []
+        self.keyphrases = []
+        self.sentence_structure = None
 
     def load_checkbox_states(self):
         self.audio_checkbox_state = get_config_parameter(
@@ -380,7 +395,14 @@ class TextInputWindow(BaseWindow):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
         # TODO: make any processing window optional. Open/Close windows which are selected
         # delete_audio_files()
-        self.text = self.text_input.get("1.0", "end-1c")
+        text_input = self.text_input.get("1.0", "end-1c")
+        # filter wikipedia citation and also remove the citation number using regex
+        text_input = re.sub(r"\[\d+\]", "", text_input)
+
+        # filter out special characters except for .,?! and spaces
+        text_input = re.sub(r"[^a-zA-Z0-9.,?! ]+", "", text_input)
+
+        self.text = text_input
         self.sentences = nltk.sent_tokenize(self.text)
         self.text_window.update_text_display(self.text)
         self.audio_window.sentences = self.sentences

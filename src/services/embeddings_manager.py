@@ -71,7 +71,9 @@ def get_words_and_embeddings(text):
 
 def get_cluster_labels(word_to_embedding):
     # Cluster word_to_embedding using HDBSCAN
-    clusterer = HDBSCAN()
+    clusterer = HDBSCAN(
+        min_cluster_size=10, metric="euclidean", cluster_selection_method="eom"
+    )
     cluster_labels = clusterer.fit_predict(list(word_to_embedding.values()))
     return cluster_labels
 

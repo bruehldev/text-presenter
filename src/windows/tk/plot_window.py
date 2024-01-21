@@ -85,12 +85,12 @@ class PlotWindow(BaseWindow):
             plt.scatter(
                 *zip(*cluster_embeddings),
                 s=cluster_occurrences,
-                c=[self.color_dict[label] for label in cluster_labels],
+                c=[self.color_dict.get(label, "gray") for label in cluster_labels],
                 marker=marker,
                 label=self.cluster_name_mappings[cluster],
             )
 
-        plt.legend(loc="upper right")
+        plt.legend(loc="best", fontsize=7)
 
         for label, (x, y) in zip(all_labels, all_embeddings):
             plt.text(x, y, label, fontsize=9)

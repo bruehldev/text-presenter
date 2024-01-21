@@ -55,8 +55,13 @@ class TextWindow(BaseWindow):
         for sentence in self.sentence_structure.values():
             words = sentence["words"]
             cluster_labels = sentence["cluster_labels"]
+            if cluster_labels is None:
+                continue
+
             for word, cluster_label in zip(words, cluster_labels):
                 if cluster_label == -1:
+                    continue
+                if cluster_label not in self.color_dict:
                     continue
                 self.text_widget.tag_config(
                     cluster_label,
