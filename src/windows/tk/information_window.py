@@ -15,7 +15,6 @@ class InformationWindow(BaseWindow):
             textvariable=self.dropdown_var,
             values=[
                 "Keyphrases",
-                "Listbox2",
                 "Frequent Words",
                 "Bulletpoints",
                 "Topics",
@@ -50,11 +49,6 @@ class InformationWindow(BaseWindow):
         self.topics_listbox.configure(bg="black", fg="white")
         self.topics_listbox.pack(fill="both", expand=True)
 
-        # TODO REMOVE THIS
-        # Additional listbox for Listbox2
-        self.listbox2 = Listbox(self.frame)
-        self.listbox2.configure(bg="black", fg="white")
-
         # Initial setting
         self.on_dropdown_change(None)
 
@@ -64,7 +58,6 @@ class InformationWindow(BaseWindow):
         # Hide both listboxes initially
         self.keyphrases_listbox.pack_forget()
         self.frequent_words_listbox.pack_forget()
-        self.listbox2.pack_forget()
         self.bulletpoints_listbox.pack_forget()
         self.topics_listbox.pack_forget()
 
@@ -72,15 +65,20 @@ class InformationWindow(BaseWindow):
             self.keyphrases_listbox.delete(0, END)
             self.frequent_words_listbox.delete(0, END)
             if self.keyphrases is None:
+                self.keyphrases_listbox.insert(END, "Apply Information Retrival first")
+                self.keyphrases_listbox.pack(fill="both", expand=True)
                 return
             for keyphrase in self.keyphrases:
                 self.keyphrases_listbox.insert(END, keyphrase)
-
             self.keyphrases_listbox.pack(fill="both", expand=True)
         elif selected_value == "Frequent Words":
             self.keyphrases_listbox.delete(0, END)
             self.frequent_words_listbox.delete(0, END)
             if self.frequent_words is None:
+                self.frequent_words_listbox.insert(
+                    END, "Apply Information Retrival first"
+                )
+                self.frequent_words_listbox.pack(fill="both", expand=True)
                 return
             for word, frequency in self.frequent_words:
                 # if frequency is 1, keyphrase is not important
@@ -88,15 +86,11 @@ class InformationWindow(BaseWindow):
                     continue
                 self.frequent_words_listbox.insert(END, f"{word}: {frequency} times")
             self.frequent_words_listbox.pack(fill="both", expand=True)
-        elif selected_value == "Listbox2":
-            # Show the second listbox with items 1, 2, 3
-            self.listbox2.pack(fill="both", expand=True)
-            self.listbox2.delete(0, END)
-            for item in ["1", "2", "3"]:
-                self.listbox2.insert(END, item)
         elif selected_value == "Bulletpoints":
             self.bulletpoints_listbox.delete(0, END)
             if self.bulletpoints is None:
+                self.bulletpoints_listbox.insert(END, "Apply Summerization first")
+                self.bulletpoints_listbox.pack(fill="both", expand=True)
                 return
             for bulletpoint in self.bulletpoints:
                 self.bulletpoints_listbox.insert(END, bulletpoint)
@@ -104,6 +98,8 @@ class InformationWindow(BaseWindow):
         elif selected_value == "Topics":
             self.topics_listbox.delete(0, END)
             if self.topics is None:
+                self.topics_listbox.insert(END, "Apply Topic Clustering first")
+                self.topics_listbox.pack(fill="both", expand=True)
                 return
             for topic in self.topics:
                 self.topics_listbox.insert(END, topic)
@@ -113,6 +109,5 @@ class InformationWindow(BaseWindow):
         self.keyphrases_listbox.delete(0, END)
         self.frequent_words_listbox.delete(0, END)
         self.bulletpoints_listbox.delete(0, END)
-        self.listbox2.delete(0, END)
         self.topics_listbox.delete(0, END)
         self.dropdown_var.set("Keyphrases")
