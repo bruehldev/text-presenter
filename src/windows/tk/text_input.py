@@ -393,7 +393,6 @@ class TextInputWindow(BaseWindow):
         messagebox.showinfo("Done", "Text processed!")
 
     def update_text_display(self):
-        # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
         # TODO: make any processing window optional. Open/Close windows which are selected
         delete_audio_files()
 
