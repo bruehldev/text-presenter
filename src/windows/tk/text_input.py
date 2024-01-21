@@ -10,6 +10,7 @@ from nltk import FreqDist
 from src.services.config_manager import get_config_parameter, set_config_parameter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tkinter import messagebox
+from src.services.audio_manager import delete_audio_files
 import random
 import re
 
@@ -394,7 +395,8 @@ class TextInputWindow(BaseWindow):
     def update_text_display(self):
         # TODO: delete audio files or use Apply to Process Audio. I keep it for faster testing
         # TODO: make any processing window optional. Open/Close windows which are selected
-        # delete_audio_files()
+        delete_audio_files()
+
         text_input = self.text_input.get("1.0", "end-1c")
         # filter wikipedia citation and also remove the citation number using regex
         text_input = re.sub(r"\[\d+\]", "", text_input)
