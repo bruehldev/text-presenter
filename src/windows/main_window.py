@@ -1,4 +1,4 @@
-from tkinter import ttk, Toplevel, DoubleVar, BOTTOM, W, S
+from tkinter import ttk, Toplevel, DoubleVar, BOTTOM, W, S, BooleanVar
 from src.windows.tk.base_window import BaseWindow
 from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
@@ -91,6 +91,9 @@ class MainWindow(BaseWindow):
         else:
             self.rsvp_window_button.config(text="Open RSVP Window")
         self.rsvp_window_button.pack()
+
+        self.word_display_running = BooleanVar()
+        self.word_display_running.set(False)
 
         # Information Window
         self.information_window = InformationWindow(Toplevel(self.master))
@@ -196,10 +199,18 @@ class MainWindow(BaseWindow):
                 self.rsvp_window.master,
             ),
         )
-        self.start_button.pack()
+        # self.start_button.pack()
+
+        # Stop display words button
+        self.stop_button = ttk.Button(
+            self.frame,
+            text="Stop",
+            command=lambda: self.stop_display_words(),
+        )
 
         # Place Speed label, Speed slider, and Start button at the bottom
-        self.speed_slider.pack(side=BOTTOM, anchor=W)
+        self.speed_slider.pack(side=BOTTOM, anchor=S)
+        self.stop_button.pack(side=BOTTOM, anchor=S)
         self.start_button.pack(side=BOTTOM, anchor=S)
 
     def display_words(
@@ -212,9 +223,13 @@ class MainWindow(BaseWindow):
         word_pointer_start = "1.0"
         word_pointer_end = "1.0"
 
+        self.word_display_running.set(True)
+
         # Iterate through words and display them
         words_split = words.split()
         for i in range(len(words_split)):
+            if not self.word_display_running.get():
+                break
             word = words_split[i]
             target_word_label.update_text_display(word)
             # underline and highlight
@@ -249,6 +264,9 @@ class MainWindow(BaseWindow):
         target_text_widget.tag_remove("highlight", "1.0", "end")
         # reset word label
         target_word_label.update_text_display("")
+
+    def stop_display_words(self):
+        self.word_display_running.set(False)
 
     def toggle_text_input_window_button(self, name):
         if self.text_input_window.master.state() == "normal":
