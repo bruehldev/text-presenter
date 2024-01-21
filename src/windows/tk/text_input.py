@@ -349,9 +349,9 @@ class TextInputWindow(BaseWindow):
                             cluster_name_mappings[cluster_label] = keyphrase
                             skip_keyphrase = True
                             names_for_cluster_found.append(cluster_label)
-                            print(
-                                f"i found {word} in {keyphrase} for cluster {cluster_label}"
-                            )
+                            # print(
+                            #    f"i found {word} in {keyphrase} for cluster {cluster_label}"
+                            # )
                             break
 
             # add outliers
