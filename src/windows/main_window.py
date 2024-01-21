@@ -8,6 +8,7 @@ from src.windows.tk.information_window import InformationWindow
 from src.windows.tk.qa_window import QAWindow
 from src.windows.tk.plot_window import PlotWindow
 from src.windows.tk.summerization_window import SummerizationWindow
+from tkinter import messagebox
 
 # Color dict for clustering - Add more colors as needed
 color_dict = {
@@ -130,6 +131,7 @@ class MainWindow(BaseWindow):
 
         # Speed control slider
         self.speed_var = DoubleVar()
+        # set middle
         self.speed_slider = ttk.Scale(
             self.frame,
             from_=3.0,
@@ -138,7 +140,7 @@ class MainWindow(BaseWindow):
             length=400,
             orient="horizontal",
         )
-        self.speed_slider.set(1.0)
+        self.speed_slider.set(8.0)
         self.speed_slider.pack()
 
         # Audio Window
@@ -188,7 +190,7 @@ class MainWindow(BaseWindow):
             text="Start",
             command=lambda: self.display_words(
                 self.speed_var.get(),
-                self.text_input_window.text_input.get("1.0", "end-1c"),
+                self.text_input_window.text,
                 self.text_window.text_widget,
                 self.rsvp_window,
                 self.rsvp_window.master,
@@ -203,6 +205,9 @@ class MainWindow(BaseWindow):
     def display_words(
         self, speed, words, target_text_widget, target_word_label, target_word_window
     ):
+        if words == "":
+            messagebox.showerror("Error", "Please enter text to display")
+            return
         # create text index
         word_pointer_start = "1.0"
         word_pointer_end = "1.0"
@@ -212,6 +217,9 @@ class MainWindow(BaseWindow):
         for i in range(len(words_split)):
             word = words_split[i]
             target_word_label.update_text_display(word)
+            # underline and highlight
+            target_word_label.underline_keyphrases()
+            target_word_label.highlight_words()
 
             # use index to highlight the word in the text widget
             word_pointer_start = target_text_widget.search(

@@ -32,6 +32,7 @@ class TextInputWindow(BaseWindow):
         summerization_window,
     ):
         super().__init__(master, "Text Input", "config/text_input.conf")
+        self.text = ""
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         self.keyphrases = None
@@ -398,12 +399,12 @@ class TextInputWindow(BaseWindow):
 
         text_input = self.text_input.get("1.0", "end-1c")
         # filter wikipedia citation and also remove the citation number using regex
-        text_input = re.sub(r"\[\d+\]", "", text_input)
+        filtered_text_input = re.sub(r"\[\d+\]", "", text_input)
 
         # filter out special characters except for .,?! and spaces
-        text_input = re.sub(r"[^a-zA-Z0-9.,?! ]+", "", text_input)
+        filtered_text_input = re.sub(r"[^a-zA-Z0-9.,?! ]+", "", text_input)
 
-        self.text = text_input
+        self.text = filtered_text_input
         self.sentences = nltk.sent_tokenize(self.text)
         self.text_window.update_text_display(self.text)
         self.audio_window.sentences = self.sentences
