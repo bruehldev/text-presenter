@@ -79,7 +79,8 @@ class rsvpWindow(BaseWindow):
                     continue
                 self.word_text.tag_config(
                     cluster_label,
-                    background=self.color_dict[cluster_label],
+                    underline=True,
+                    underlinefg=self.color_dict[cluster_label],
                 )
                 start_idx = "1.0"
                 while True:

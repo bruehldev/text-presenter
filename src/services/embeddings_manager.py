@@ -35,7 +35,7 @@ def get_words_and_embeddings(text):
 
         # Reduce embeddings to 2 dimensions using UMAP
         reducer = umap.UMAP(
-            metric="cosine", n_components=2, random_state=42, n_neighbors=5, n_jobs=1
+            metric="cosine", n_components=2, random_state=42, n_neighbors=7, n_jobs=1
         )
         first_token_embeddings_cpu = first_token_embeddings.cpu()
         reduced_embeddings = reducer.fit_transform(first_token_embeddings_cpu)
@@ -72,7 +72,7 @@ def get_words_and_embeddings(text):
 def get_cluster_labels(word_to_embedding):
     # Cluster word_to_embedding using HDBSCAN
     clusterer = HDBSCAN(
-        min_cluster_size=10, metric="euclidean", cluster_selection_method="eom"
+        min_cluster_size=7, metric="euclidean", cluster_selection_method="eom"
     )
     cluster_labels = clusterer.fit_predict(list(word_to_embedding.values()))
     return cluster_labels
