@@ -57,7 +57,7 @@ class TextInputWindow(BaseWindow):
 
         self.audio_processing_var = IntVar(value=self.audio_checkbox_state)
         self.information_processing_var = IntVar(value=self.information_checkbox_state)
-        self.topic_clustering_var = IntVar(value=self.information_checkbox_state)
+        self.topic_clustering_var = IntVar(value=self.topic_clustering_checkbox_state)
         self.summerization_var = IntVar(value=self.summerization_checkbox_state)
 
         # Checkboxes for processing windows
@@ -117,7 +117,7 @@ class TextInputWindow(BaseWindow):
         # set topic clustering checkbox to 1 if information processing is 1
         if self.information_checkbox_state == 0:
             self.topic_clustering_checkbox_state = 0
-
+        else:
             self.topic_clustering_checkbox_state = get_config_parameter(
                 "text_input", "topic_clustering"
             )
@@ -138,9 +138,11 @@ class TextInputWindow(BaseWindow):
         # if information processing is 1, set topic clustering to 1
         if self.information_processing_var.get() == 0:
             set_config_parameter("text_input", "topic_clustering", 0)
-            # update checkbox
             self.topic_clustering_var.set(0)
-
+        else:
+            set_config_parameter(
+                "text_input", "topic_clustering", self.topic_clustering_var.get()
+            )
         # set summerization checkbox
         set_config_parameter(
             "text_input", "summerization", self.summerization_var.get()
