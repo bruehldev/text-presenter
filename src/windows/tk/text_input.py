@@ -406,8 +406,16 @@ class TextInputWindow(BaseWindow):
         # replace & with and
         filtered_text_input = filtered_text_input.replace("&", " and ")
 
+        # concat words with - if they are split by a line break
+        filtered_text_input = re.sub(r"-\n", "", filtered_text_input)
+
+        # replace \n with space
+        filtered_text_input = filtered_text_input.replace("\n", " ")
+
         # filter out special characters except for .,?! and spaces
-        filtered_text_input = re.sub(r"[^a-zA-Z0-9.,?!-/'´ ]+", " ", text_input)
+        filtered_text_input = re.sub(
+            r"[^a-zA-Z0-9.,?!-/'´’ ]+", " ", filtered_text_input
+        )
 
         # replace multiple spaces with one space
         filtered_text_input = re.sub(r" +", " ", filtered_text_input)
