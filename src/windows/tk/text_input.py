@@ -401,8 +401,14 @@ class TextInputWindow(BaseWindow):
         # filter wikipedia citation and also remove the citation number using regex
         filtered_text_input = re.sub(r"\[\d+\]", "", text_input)
 
+        # replace & with and
+        filtered_text_input = filtered_text_input.replace("&", " and ")
+
         # filter out special characters except for .,?! and spaces
-        filtered_text_input = re.sub(r"[^a-zA-Z0-9.,?! ]+", "", text_input)
+        filtered_text_input = re.sub(r"[^a-zA-Z0-9.,?!-/'´ ]+", " ", text_input)
+
+        # replace multiple spaces with one space
+        filtered_text_input = re.sub(r" +", " ", filtered_text_input)
 
         self.text = filtered_text_input
         self.sentences = nltk.sent_tokenize(self.text)
