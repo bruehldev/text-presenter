@@ -103,13 +103,13 @@ class rsvpWindow(BaseWindow):
 
     def increase_text_size(self):
         self.font_size += 2
-        self.word_text.config(font=("Helvetica", self.font_size))
+        self.word_text.config(font=("Arial", self.font_size))
         self.save_font_size()
 
     def decrease_text_size(self):
         if self.font_size > 2:
             self.font_size -= 2
-            self.word_text.config(font=("Helvetica", self.font_size))
+            self.word_text.config(font=("Arial", self.font_size))
             self.save_font_size()
 
     def save_font_size(self):
@@ -119,7 +119,7 @@ class rsvpWindow(BaseWindow):
         loaded_font_size = get_config_parameter("rsvp_window", "font_size")
         if loaded_font_size is not None:
             self.font_size = loaded_font_size
-            self.word_text.config(font=("Helvetica", self.font_size))
+            self.word_text.config(font=("Arial", self.font_size))
 
     def reset(self):
         self.word_text.config(state=NORMAL)
