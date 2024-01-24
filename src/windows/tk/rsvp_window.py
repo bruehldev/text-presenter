@@ -40,10 +40,15 @@ class rsvpWindow(BaseWindow):
         self.word_text.pack(fill=BOTH, expand=True)
         self.word_text.config(state=DISABLED)
 
-    def update_text_display(self, text):
+    def update_text_display(self, text, center=False):
         self.word_text.config(state=NORMAL)
-        self.word_text.delete("1.0", END)
-        self.word_text.insert(END, text)
+        if center:
+            self.word_text.tag_configure("center", justify="center")
+            self.word_text.delete("1.0", END)
+            self.word_text.insert(END, text, "center")
+        else:
+            self.word_text.delete("1.0", END)
+            self.word_text.insert(END, text)
 
     def underline_keyphrases(self):
         if self.keyphrases is not None:

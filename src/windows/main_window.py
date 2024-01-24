@@ -231,7 +231,7 @@ class MainWindow(BaseWindow):
             if not self.word_display_running.get():
                 break
             word = words_split[i]
-            target_word_label.update_text_display(word)
+            target_word_label.update_text_display(word, True)
             # underline and highlight
             target_word_label.underline_keyphrases()
             target_word_label.highlight_words()
