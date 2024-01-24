@@ -1,5 +1,5 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import nltk
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 
 def generate_headline(text):

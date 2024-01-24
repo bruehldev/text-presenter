@@ -1,16 +1,15 @@
 import os
 import threading
-from tkinter import ttk, StringVar, BOTTOM, NORMAL, DISABLED
-from tkinter import messagebox
-from src.services.tts_manager import generate_tts, generate_tts_title, get_model_names
-from src.services.audio_manager import (
-    play_audio_file,
-    delete_audio_files,
-    play_audio_file_channel,
-    stop_audio_channel,
-)
+from tkinter import BOTTOM, DISABLED, NORMAL, StringVar, messagebox, ttk
+
+from src.services.audio_manager import (delete_audio_files, play_audio_file,
+                                        play_audio_file_channel,
+                                        stop_audio_channel)
+from src.services.config_manager import (get_config_parameter,
+                                         set_config_parameter)
+from src.services.tts_manager import (generate_tts, generate_tts_title,
+                                      get_model_names)
 from src.windows.tk.base_window import BaseWindow
-from src.services.config_manager import get_config_parameter, set_config_parameter
 
 
 class AudioWindow(BaseWindow):

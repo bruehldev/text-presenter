@@ -1,11 +1,11 @@
-from transformers import BertTokenizer, BertModel
-import torch
-import umap
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import HDBSCAN
 import threading
 
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import umap
+from sklearn.cluster import HDBSCAN
+from transformers import BertModel, BertTokenizer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

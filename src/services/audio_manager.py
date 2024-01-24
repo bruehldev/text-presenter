@@ -1,6 +1,7 @@
-import pygame
 import os
 from tkinter import messagebox
+
+import pygame
 
 # Initialize Pygame
 pygame.init()

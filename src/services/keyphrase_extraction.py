@@ -1,10 +1,7 @@
-from transformers import (
-    TokenClassificationPipeline,
-    AutoModelForTokenClassification,
-    AutoTokenizer,
-)
-from transformers.pipelines import AggregationStrategy
 import numpy as np
+from transformers import (AutoModelForTokenClassification, AutoTokenizer,
+                          TokenClassificationPipeline)
+from transformers.pipelines import AggregationStrategy
 
 
 # Define keyphrase extraction pipeline

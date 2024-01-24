@@ -1,19 +1,21 @@
-from tkinter import ttk, NORMAL, DISABLED, IntVar, NORMAL, Text, END, DISABLED
-from src.windows.tk.base_window import BaseWindow
-import nltk
-from src.services.headline_generator import generate_headline
-from src.services.keyphrase_extraction import extract_keyphrases
-from src.services.embeddings_manager import get_words_and_embeddings, get_cluster_labels
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk import FreqDist
-from src.services.config_manager import get_config_parameter, set_config_parameter
-from sklearn.feature_extraction.text import TfidfVectorizer
-from tkinter import messagebox
-from src.services.audio_manager import delete_audio_files
 import random
 import re
+from tkinter import DISABLED, END, NORMAL, IntVar, Text, messagebox, ttk
 
+import nltk
+from nltk import FreqDist
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from src.services.audio_manager import delete_audio_files
+from src.services.config_manager import (get_config_parameter,
+                                         set_config_parameter)
+from src.services.embeddings_manager import (get_cluster_labels,
+                                             get_words_and_embeddings)
+from src.services.headline_generator import generate_headline
+from src.services.keyphrase_extraction import extract_keyphrases
+from src.windows.tk.base_window import BaseWindow
 
 nltk.download("punkt")
 nltk.download("stopwords")

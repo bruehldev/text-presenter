@@ -1,6 +1,7 @@
+from tkinter import END, NORMAL, Text, ttk
+
 from src.services.qa_manager import generate_answer
 from src.windows.tk.base_window import BaseWindow
-from tkinter import ttk, END, NORMAL, Text
 
 
 class QAWindow(BaseWindow):

@@ -1,8 +1,10 @@
-from tkinter import ttk, Text, NORMAL, DISABLED, END
-from src.windows.tk.base_window import BaseWindow
-from src.services.text_summerization import summarize
+from tkinter import DISABLED, END, NORMAL, Text, ttk
+
 import nltk
 from nltk.corpus import stopwords
+
+from src.services.text_summerization import summarize
+from src.windows.tk.base_window import BaseWindow
 
 nltk.download("stopwords")
 

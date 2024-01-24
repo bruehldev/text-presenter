@@ -1,8 +1,11 @@
 from tkinter import ttk
-from src.windows.tk.base_window import BaseWindow
+
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk, FigureCanvasTkAgg
 from cycler import cycler
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
+                                               NavigationToolbar2Tk)
+
+from src.windows.tk.base_window import BaseWindow
 
 
 class PlotWindow(BaseWindow):

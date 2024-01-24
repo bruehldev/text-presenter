@@ -1,4 +1,5 @@
-from tkinter import ttk, END, StringVar, Listbox
+from tkinter import END, Listbox, StringVar, ttk
+
 from src.windows.tk.base_window import BaseWindow
 
 

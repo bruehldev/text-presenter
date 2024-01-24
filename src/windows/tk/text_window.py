@@ -1,4 +1,5 @@
-from tkinter import ttk, Text, NORMAL, DISABLED, END
+from tkinter import DISABLED, END, NORMAL, Text, ttk
+
 from src.windows.tk.base_window import BaseWindow
 
 

@@ -1,5 +1,6 @@
 from transformers import pipeline
 
+
 def generate_answer(question, text):
     model_name = "deepset/roberta-base-squad2"
 

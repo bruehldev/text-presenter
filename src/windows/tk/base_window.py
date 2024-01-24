@@ -1,4 +1,5 @@
 import tkinter as ttk
+
 from src.services.config_manager import load_window_config, save_window_config
 
 

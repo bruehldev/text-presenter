@@ -1,14 +1,15 @@
-from tkinter import ttk, Toplevel, DoubleVar, BOTTOM, W, S, BooleanVar
+from tkinter import (BOTTOM, BooleanVar, DoubleVar, S, Toplevel, W, messagebox,
+                     ttk)
+
+from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.base_window import BaseWindow
+from src.windows.tk.information_window import InformationWindow
+from src.windows.tk.plot_window import PlotWindow
+from src.windows.tk.qa_window import QAWindow
+from src.windows.tk.rsvp_window import rsvpWindow
+from src.windows.tk.summerization_window import SummerizationWindow
 from src.windows.tk.text_input import TextInputWindow
 from src.windows.tk.text_window import TextWindow
-from src.windows.tk.audio_window import AudioWindow
-from src.windows.tk.rsvp_window import rsvpWindow
-from src.windows.tk.information_window import InformationWindow
-from src.windows.tk.qa_window import QAWindow
-from src.windows.tk.plot_window import PlotWindow
-from src.windows.tk.summerization_window import SummerizationWindow
-from tkinter import messagebox
 
 # Color dict for clustering - Add more colors as needed
 color_dict = {
