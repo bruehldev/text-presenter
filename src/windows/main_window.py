@@ -35,7 +35,7 @@ color_dict = {
 
 class MainWindow(BaseWindow):
     def __init__(self, master):
-        super().__init__(master, "Options", "config/root.conf")
+        super().__init__(master, "Window options", "config/root.conf")
         self.frame = ttk.Frame(self.master)
         self.frame.pack(fill="both", expand=True)
         # Text Window
@@ -46,51 +46,49 @@ class MainWindow(BaseWindow):
             command=lambda: self.toggle_text_window_button("Text Window"),
         )
         if self.text_window.master.state() == "normal":
-            self.text_window_button.config(text=f"Close Text Window")
+            self.text_window_button.config(text=f"Close Text")
         else:
-            self.text_window_button.config(text="Open Text Window")
-        self.text_window_button.pack()
+            self.text_window_button.config(text="Open Text")
+        self.text_window_button
 
         # Summerization Window
         self.summerization_window = SummerizationWindow(Toplevel(self.master))
         self.summerization_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_summerization_window_button(
-                "Summerization Window"
-            ),
+            command=lambda: self.toggle_summerization_window_button("Summerization"),
         )
         if self.summerization_window.master.state() == "normal":
-            self.summerization_window_button.config(text=f"Close Summerization Window")
+            self.summerization_window_button.config(text=f"Close Summerization")
         else:
-            self.summerization_window_button.config(text="Open Summerization Window")
-        self.summerization_window_button.pack()
+            self.summerization_window_button.config(text="Open Summerization")
+        self.summerization_window_button
 
         # Question Answer Window
         self.qa_window = QAWindow(Toplevel(self.master))
         self.qa_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_qa_window_button("Question Answer Window"),
+            command=lambda: self.toggle_qa_window_button("QA"),
         )
         if self.qa_window.master.state() == "normal":
-            self.qa_window_button.config(text=f"Close Question Answer Window")
+            self.qa_window_button.config(text=f"Close QA")
         else:
-            self.qa_window_button.config(text="Open Question Answer Window")
-        self.qa_window_button.pack()
+            self.qa_window_button.config(text="Open QA")
+        self.qa_window_button
 
         # RSVP Window
         self.rsvp_window = rsvpWindow(Toplevel(self.master), color_dict)
         self.rsvp_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_rsvp_window_button("RSVP Window"),
+            command=lambda: self.toggle_rsvp_window_button("RSVP"),
         )
         if self.rsvp_window.master.state() == "normal":
-            self.rsvp_window_button.config(text=f"Close RSVP Window")
+            self.rsvp_window_button.config(text=f"Close RSVP")
         else:
-            self.rsvp_window_button.config(text="Open RSVP Window")
-        self.rsvp_window_button.pack()
+            self.rsvp_window_button.config(text="Open RSVP")
+        self.rsvp_window_button
 
         self.word_display_running = BooleanVar()
         self.word_display_running.set(False)
@@ -100,13 +98,13 @@ class MainWindow(BaseWindow):
         self.information_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_information_window_button("Information Window"),
+            command=lambda: self.toggle_information_window_button("Information"),
         )
         if self.information_window.master.state() == "normal":
-            self.information_window_button.config(text=f"Close Information Retrival")
+            self.information_window_button.config(text=f"Close Information")
         else:
-            self.information_window_button.config(text="Open Information Retrival")
-        self.information_window_button.pack()
+            self.information_window_button.config(text="Open Information")
+        self.information_window_button
 
         # Plot Window
         self.plot_window = PlotWindow(Toplevel(self.master), color_dict)
@@ -122,15 +120,15 @@ class MainWindow(BaseWindow):
         self.plot_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_plot_window_button("Plot Window"),
+            command=lambda: self.toggle_plot_window_button("Plot"),
         )
 
         if self.plot_window.master.state() == "normal":
-            self.plot_window_button.config(text=f"Close Plot Window")
+            self.plot_window_button.config(text=f"Close Plot")
         else:
-            self.plot_window_button.config(text="Open Plot Window")
+            self.plot_window_button.config(text="Open Plot")
 
-        self.plot_window_button.pack()
+        self.plot_window_button
 
         # Speed control slider
         self.speed_var = DoubleVar()
@@ -144,7 +142,7 @@ class MainWindow(BaseWindow):
             orient="horizontal",
         )
         self.speed_slider.set(8.0)
-        self.speed_slider.pack()
+        self.speed_slider
 
         # Audio Window
         self.audio_window = AudioWindow(
@@ -156,14 +154,14 @@ class MainWindow(BaseWindow):
         self.audio_window_button = ttk.Button(
             self.frame,
             text="",
-            command=lambda: self.toggle_audio_window_button("Audio Window"),
+            command=lambda: self.toggle_audio_window_button("Audio"),
         )
         if self.audio_window.master.state() == "normal":
-            self.audio_window_button.config(text=f"Close Audio Window")
+            self.audio_window_button.config(text=f"Close Audio")
         else:
-            self.audio_window_button.config(text="Open Audio Window")
+            self.audio_window_button.config(text="Open Audio")
 
-        self.audio_window_button.pack()
+        self.audio_window_button
 
         # Text Input Window
         self.text_input_window = TextInputWindow(
@@ -185,7 +183,20 @@ class MainWindow(BaseWindow):
             self.text_input_button.config(text=f"Close Text Input")
         else:
             self.text_input_button.config(text="Open Text Input")
-        self.text_input_button.pack()
+        self.text_input_button
+
+        # use grid to pack buttons
+        self.text_input_button.grid(row=0, column=0)
+        self.text_window_button.grid(row=0, column=1)
+
+        self.rsvp_window_button.grid(row=1, column=0)
+        self.audio_window_button.grid(row=1, column=1)
+
+        self.information_window_button.grid(row=2, column=0)
+        self.plot_window_button.grid(row=2, column=1)
+
+        self.summerization_window_button.grid(row=4, column=0)
+        self.qa_window_button.grid(row=4, column=1)
 
         # Start display words button
         self.start_button = ttk.Button(
@@ -209,9 +220,17 @@ class MainWindow(BaseWindow):
         )
 
         # Place Speed label, Speed slider, and Start button at the bottom
+        """
         self.speed_slider.pack(side=BOTTOM, anchor=S)
         self.stop_button.pack(side=BOTTOM, anchor=S)
         self.start_button.pack(side=BOTTOM, anchor=S)
+        """
+        # grid
+        # insert blank row
+        ttk.Label(self.frame, text="").grid(row=5, column=0)
+        self.start_button.grid(row=6, column=0)
+        self.stop_button.grid(row=6, column=1)
+        self.speed_slider.grid(row=7, column=0, columnspan=2)
 
     def display_words(
         self, speed, words, target_text_widget, target_word_label, target_word_window
