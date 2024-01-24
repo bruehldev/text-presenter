@@ -6,8 +6,6 @@ from nltk.corpus import stopwords
 from src.services.text_summerization import summarize
 from src.windows.tk.base_window import BaseWindow
 
-nltk.download("stopwords")
-
 
 class SummerizationWindow(BaseWindow):
     def __init__(self, master):
