@@ -1,9 +1,7 @@
 from transformers import pipeline
 
 
-def generate_answer(question, text):
-    model_name = "deepset/roberta-base-squad2"
-
+def generate_answer(question, text, model_name):
     nlp = pipeline('question-answering', model=model_name, tokenizer=model_name)
 
     QA_input = {
