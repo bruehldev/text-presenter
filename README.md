@@ -1,5 +1,11 @@
 # Text-presenter
 
+## Demo
+
+https://github.com/bruehldev/text-presenter/assets/15344369/cd66171d-5974-4b13-b46f-2e738ffd05e2
+
+
+
 ## Requirements
 - Conda for package management
 - Ensure you have an NVIDIA GPU with the required drivers:
