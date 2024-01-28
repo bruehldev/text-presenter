@@ -9,10 +9,8 @@ from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from src.services.audio_manager import delete_audio_files
-from src.services.config_manager import (get_config_parameter,
-                                         set_config_parameter)
-from src.services.embeddings_manager import (get_cluster_labels,
-                                             get_words_and_embeddings)
+from src.services.config_manager import get_config_parameter, set_config_parameter
+from src.services.embeddings_manager import get_cluster_labels, get_words_and_embeddings
 from src.services.headline_generator import generate_headline
 from src.services.keyphrase_extraction import extract_keyphrases
 from src.windows.tk.base_window import BaseWindow

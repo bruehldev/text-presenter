@@ -1,7 +1,6 @@
 from tkinter import BOTH, DISABLED, END, NORMAL, Text, ttk
 
-from src.services.config_manager import (get_config_parameter,
-                                         set_config_parameter)
+from src.services.config_manager import get_config_parameter, set_config_parameter
 from src.windows.tk.base_window import BaseWindow
 
 

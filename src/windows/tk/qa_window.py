@@ -10,7 +10,9 @@ class QAWindow(BaseWindow):
         self.frame.pack(fill="both", expand=True)
 
         # Dropdown (Combobox)
-        self.dropdown_var = StringVar(value="bert-large-uncased-whole-word-masking-finetuned-squad")
+        self.dropdown_var = StringVar(
+            value="bert-large-uncased-whole-word-masking-finetuned-squad"
+        )
         self.dropdown = ttk.Combobox(
             self.frame,
             textvariable=self.dropdown_var,
@@ -32,7 +34,7 @@ class QAWindow(BaseWindow):
         self.text = ""
         self.answer = ""
         self.question = ""
-        self.model =  self.dropdown_var.get()
+        self.model = self.dropdown_var.get()
 
         self.question_input = Text(self.frame, state=NORMAL)
         self.question_input.pack()

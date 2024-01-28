@@ -1,5 +1,4 @@
-from tkinter import (BOTTOM, BooleanVar, DoubleVar, S, Toplevel, W, messagebox,
-                     ttk)
+from tkinter import BOTTOM, BooleanVar, DoubleVar, S, Toplevel, W, messagebox, ttk
 
 from src.windows.tk.audio_window import AudioWindow
 from src.windows.tk.base_window import BaseWindow

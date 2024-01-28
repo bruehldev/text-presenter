@@ -29,10 +29,10 @@ def save_window_config(window, filename):
             config_data = json.load(conf)
     except FileNotFoundError:
         pass
-    
+
     config_data["size"] = window.geometry()
     config_data["toggle_state"] = window.state()
-    
+
     with open(filename, "w") as conf:
         json.dump(config_data, conf)
 
