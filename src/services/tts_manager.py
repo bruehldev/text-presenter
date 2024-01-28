@@ -60,7 +60,6 @@ def get_model_names():
         "tts_models/en/sam/tacotron-DDC",
         "tts_models/en/blizzard2013/capacitron-t2-c50",
         "tts_models/en/blizzard2013/capacitron-t2-c150_v2",
-        "tts_models/en/multi-dataset/tortoise-v2",
         "tts_models/en/jenny/jenny",
     ]
     return en_model_names

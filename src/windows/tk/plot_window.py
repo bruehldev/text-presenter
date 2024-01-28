@@ -2,8 +2,7 @@ from tkinter import ttk
 
 import matplotlib.pyplot as plt
 from cycler import cycler
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
-                                               NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 from src.windows.tk.base_window import BaseWindow
 
@@ -31,6 +30,8 @@ class PlotWindow(BaseWindow):
         figure = plt.figure()
         if self.sentence_structure is None:
             return figure
+
+        # TODO Rrmove this?
         # Define the color cycle
         color_cycle = cycler(color=["red", "green", "blue", "orange"])
 
